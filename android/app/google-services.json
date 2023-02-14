@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "533886226292",
+    "project_id": "jbtailors-72459",
+    "storage_bucket": "jbtailors-72459.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:533886226292:android:9f1eb00c448e61a4d36621",
+        "android_client_info": {
+          "package_name": "com.example.jb_tailor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "533886226292-ujuhnupnjvkk05bibend7tj8rio23l11.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoCJRV_COHvG5bJ9WArpc8U3AaRRB24Z0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "533886226292-ujuhnupnjvkk05bibend7tj8rio23l11.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "533886226292-m5j2or833relhdjnnff4p6hhus2627ho.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.jbTailor"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
