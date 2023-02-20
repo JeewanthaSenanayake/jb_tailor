@@ -12,7 +12,7 @@ class WomenPage extends StatefulWidget {
 }
 
 class _State extends State<WomenPage> {
-   String uid;
+  String uid;
   _State(this.uid);
   bool loading = true;
 

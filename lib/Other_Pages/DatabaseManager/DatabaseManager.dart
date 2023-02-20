@@ -87,7 +87,8 @@ class DatabaseManager {
       String size,
       int quantity,
       String price,
-      String link) async {
+      String link,
+      String type) async {
     final cartList = FirebaseFirestore.instance.collection("cart").doc(uid);
     dynamic itemId;
     try {
@@ -100,7 +101,7 @@ class DatabaseManager {
 
     dynamic newItemId = itemId["oderID"] + 1;
     dynamic data = {
-      'oderId': "men/$oderID.jpg",
+      'oderId': "$type/$oderID.jpg",
       'oderName': oderName,
       'colour': colour,
       'size': size,

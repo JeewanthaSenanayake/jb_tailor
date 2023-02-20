@@ -100,15 +100,15 @@ class _State extends State<OderDetailsPage> {
                           if (disLike < 0) {
                             disLike = 0;
                           }
-                          await DatabaseManager().mensUpdateLikeDislike(
-                              uid, false, imgId, true, data, like, disLike, type);
+                          await DatabaseManager().mensUpdateLikeDislike(uid,
+                              false, imgId, true, data, like, disLike, type);
                         }
                         if (data['customer'][uid] == null) {
                           //not like yet
                           //  newe react user
                           like++;
-                          await DatabaseManager().mensUpdateLikeDislike(
-                              uid, true, imgId, true, data, like, disLike,type);
+                          await DatabaseManager().mensUpdateLikeDislike(uid,
+                              true, imgId, true, data, like, disLike, type);
                         }
                       },
                     ),
@@ -124,15 +124,15 @@ class _State extends State<OderDetailsPage> {
                           if (like < 0) {
                             like = 0;
                           }
-                          await DatabaseManager().mensUpdateLikeDislike(
-                              uid, false, imgId, false, data, like, disLike,type);
+                          await DatabaseManager().mensUpdateLikeDislike(uid,
+                              false, imgId, false, data, like, disLike, type);
                         }
                         if (data['customer'][uid] == null) {
                           //not dislike yet
                           //newe react user
                           disLike++;
-                          await DatabaseManager().mensUpdateLikeDislike(
-                              uid, true, imgId, false, data, like, disLike,type);
+                          await DatabaseManager().mensUpdateLikeDislike(uid,
+                              true, imgId, false, data, like, disLike, type);
                         }
                       },
                     ),
@@ -351,7 +351,8 @@ class _State extends State<OderDetailsPage> {
                             selectedSize!,
                             quantity,
                             data['price'].toString(),
-                            link);
+                            link,
+                            type);
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => cart(uid: uid)));
                       },
