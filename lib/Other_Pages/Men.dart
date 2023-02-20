@@ -106,7 +106,8 @@ class _State extends State<MenPage> {
                                       uid: uid,
                                       link: img1,
                                       data: menData['men_1'],
-                                      imgId: "men_1")));
+                                      imgId: "men_1",
+                                      type: "men")));
                             },
                             child: Image.network(
                               "$img1",
@@ -151,7 +152,8 @@ class _State extends State<MenPage> {
                                       uid: uid,
                                       link: img3,
                                       data: menData['men_3'],
-                                      imgId: "men_3")));
+                                      imgId: "men_3",
+                                      type: "men")));
                             },
                             child: Image.network(
                               "$img3",
@@ -196,7 +198,8 @@ class _State extends State<MenPage> {
                                       uid: uid,
                                       link: img5,
                                       data: menData['men_5'],
-                                      imgId: "men_5")));
+                                      imgId: "men_5",
+                                      type: "men")));
                             },
                             child: Image.network(
                               "$img5",
@@ -241,7 +244,8 @@ class _State extends State<MenPage> {
                                       uid: uid,
                                       link: img7,
                                       data: menData['men_7'],
-                                      imgId: "men_7")));
+                                      imgId: "men_7",
+                                      type: "men")));
                             },
                             child: Image.network(
                               "$img7",
@@ -291,7 +295,8 @@ class _State extends State<MenPage> {
                                       uid: uid,
                                       link: img2,
                                       data: menData['men_2'],
-                                      imgId: "men_2")));
+                                      imgId: "men_2",
+                                      type: "men")));
                             },
                             child: Image.network(
                               "$img2",
@@ -336,7 +341,8 @@ class _State extends State<MenPage> {
                                       uid: uid,
                                       link: img4,
                                       data: menData['men_4'],
-                                      imgId: "men_4")));
+                                      imgId: "men_4",
+                                      type: "men")));
                             },
                             child: Image.network(
                               "$img4",
@@ -380,7 +386,8 @@ class _State extends State<MenPage> {
                                       uid: uid,
                                       link: img6,
                                       data: menData['men_6'],
-                                      imgId: "men_6")));
+                                      imgId: "men_6",
+                                      type: "men")));
                             },
                             child: Image.network(
                               "$img6",
@@ -424,7 +431,8 @@ class _State extends State<MenPage> {
                                       uid: uid,
                                       link: img8,
                                       data: menData['men_8'],
-                                      imgId: "men_8")));
+                                      imgId: "men_8",
+                                      type: "men")));
                             },
                             child: Image.network(
                               "$img8",

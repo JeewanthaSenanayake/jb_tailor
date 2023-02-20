@@ -3,23 +3,24 @@ import 'package:jb_tailor/Other_Pages/cart.dart';
 import 'DatabaseManager/DatabaseManager.dart';
 
 class OderDetailsPage extends StatefulWidget {
-  String uid, link, imgId;
+  String uid, link, imgId, type;
   dynamic data;
   OderDetailsPage(
       {super.key,
       required this.uid,
       required this.link,
       required this.data,
-      required this.imgId});
+      required this.imgId,
+      required this.type});
 
   @override
-  State<StatefulWidget> createState() => _State(uid, link, data, imgId);
+  State<StatefulWidget> createState() => _State(uid, link, data, imgId, type);
 }
 
 class _State extends State<OderDetailsPage> {
-  String uid, link, imgId;
+  String uid, link, imgId, type;
   dynamic data;
-  _State(this.uid, this.link, this.data, this.imgId);
+  _State(this.uid, this.link, this.data, this.imgId, this.type);
 
   bool Likeval = false;
   bool DisLikeval = false;
@@ -100,14 +101,14 @@ class _State extends State<OderDetailsPage> {
                             disLike = 0;
                           }
                           await DatabaseManager().mensUpdateLikeDislike(
-                              uid, false, imgId, true, data, like, disLike);
+                              uid, false, imgId, true, data, like, disLike, type);
                         }
                         if (data['customer'][uid] == null) {
                           //not like yet
                           //  newe react user
                           like++;
                           await DatabaseManager().mensUpdateLikeDislike(
-                              uid, true, imgId, true, data, like, disLike);
+                              uid, true, imgId, true, data, like, disLike,type);
                         }
                       },
                     ),
@@ -124,14 +125,14 @@ class _State extends State<OderDetailsPage> {
                             like = 0;
                           }
                           await DatabaseManager().mensUpdateLikeDislike(
-                              uid, false, imgId, false, data, like, disLike);
+                              uid, false, imgId, false, data, like, disLike,type);
                         }
                         if (data['customer'][uid] == null) {
                           //not dislike yet
                           //newe react user
                           disLike++;
                           await DatabaseManager().mensUpdateLikeDislike(
-                              uid, true, imgId, false, data, like, disLike);
+                              uid, true, imgId, false, data, like, disLike,type);
                         }
                       },
                     ),

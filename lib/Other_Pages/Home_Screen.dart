@@ -246,7 +246,7 @@ class _State extends State<HomePage> {
                               GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => WomenPage()));
+                                      builder: (context) => WomenPage(uid: uid,)));
                                   print("woman");
                                 },
                                 child: Image.asset(

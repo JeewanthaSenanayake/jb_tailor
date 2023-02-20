@@ -50,13 +50,13 @@ class DatabaseManager {
     return await profileList.doc(uid).update({selector: value});
   }
 
-  //Update like dislike men
+  //Update like dislike men , women, kids data
   Future<void> mensUpdateLikeDislike(String uid, bool allReadyreact, String doc,
-      bool likeOrDis, dynamic data, int like, int disLike) async {
+      bool likeOrDis, dynamic data, int like, int disLike, String type) async {
     //true for like in likeOrDis
     // allReadyreact == true means newe react user
 
-    final ref = FirebaseFirestore.instance.collection("men").doc(doc);
+    final ref = FirebaseFirestore.instance.collection(type).doc(doc);
     data['customer'].addAll({uid: likeOrDis});
 
     if (allReadyreact) {
