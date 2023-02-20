@@ -180,7 +180,7 @@ class _ChechoutState extends State<Chechout> {
                     Align(
                       alignment: Alignment.center,
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ElevatedButton.icon(
                             onPressed: () async {},
