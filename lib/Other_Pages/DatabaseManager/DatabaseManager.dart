@@ -79,8 +79,15 @@ class DatabaseManager {
   }
 
   //Add cart
-  Future<dynamic> addToCart(String uid, String oderID, String oderName,
-      String colour, String size, int quantity, String price, String link) async {
+  Future<dynamic> addToCart(
+      String uid,
+      String oderID,
+      String oderName,
+      String colour,
+      String size,
+      int quantity,
+      String price,
+      String link) async {
     final cartList = FirebaseFirestore.instance.collection("cart").doc(uid);
     dynamic itemId;
     try {
@@ -100,7 +107,7 @@ class DatabaseManager {
       'quantity': quantity,
       'isPending': 1,
       'price': price,
-      'link' : link,
+      'link': link,
     };
 
     dynamic oder = {
@@ -122,6 +129,17 @@ class DatabaseManager {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  //delete item from cart
+  Future<dynamic> deleteItemFromCart(
+      String uid, int oderId, dynamic data) async {
+    final cartList = FirebaseFirestore.instance.collection("cart").doc(uid);
+    data["isPending"] = 0;
+    dynamic oder = {
+      oderId.toString(): data,
+    };
+    return await cartList.update(oder);
   }
 
   //For Admin

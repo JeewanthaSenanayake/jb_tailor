@@ -80,7 +80,7 @@ class _cartState extends State<cart> {
                             );
                           },
                           child: Container(
-                              width: double.infinity,
+                              // width: double.infinity,
                               height: scrnheight * 0.125,
                               margin: EdgeInsets.all(scrnheight * 0.01),
                               padding: EdgeInsets.all(scrnheight * 0.01),
@@ -96,12 +96,17 @@ class _cartState extends State<cart> {
                               ),
                               child: Row(
                                 children: [
-                                  SizedBox(
-                                    width: scrnheight * 0.1,
-                                    height: scrnheight * 0.1,
-                                    child: Image.network(
-                                      oderDeatails['${index + 1}']['link'],
-                                    ),
+                                  Column(
+                                    children: [
+                                      SizedBox(
+                                        width: scrnheight * 0.1,
+                                        height: scrnheight * 0.1,
+                                        child: Image.network(
+                                          oderDeatails['${index + 1}']['link'],
+                                        ),
+                                      ),
+                                      // Text("Delete"),
+                                    ],
                                   ),
                                   SizedBox(width: scrnwidth * 0.015),
                                   Column(
@@ -109,21 +114,45 @@ class _cartState extends State<cart> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(oderDeatails['${index + 1}']
-                                          ['oderName']),
+                                      Row(
+                                        children: [
+                                          SizedBox(
+                                            width: scrnwidth * 0.585,
+                                            child: Text(
+                                                oderDeatails['${index + 1}']
+                                                    ['oderName']),
+                                          ),
+                                          IconButton(
+                                              onPressed: () async {
+                                                await DatabaseManager()
+                                                    .deleteItemFromCart(
+                                                        uid,
+                                                        (index + 1),
+                                                        oderDeatails[
+                                                            '${index + 1}']);
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            cart(uid: uid)));
+                                              },
+                                              icon: const Icon(Icons.delete))
+                                        ],
+                                      ),
                                       Text(
-                                        "\nRs: ${oderDeatails['${index + 1}']['price']}",
+                                        "Rs: ${oderDeatails['${index + 1}']['price']}",
                                         style: const TextStyle(
                                           color: Colors.deepOrange,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                       Text(
-                                          "\nSize: ${oderDeatails['${index + 1}']['size']} \t Quantity: ${oderDeatails['${index + 1}']['quantity']} \t Colour: ${oderDeatails['${index + 1}']['colour']}"),
+                                          "Size: ${oderDeatails['${index + 1}']['size']} \t Quantity: ${oderDeatails['${index + 1}']['quantity']} \t Colour: ${oderDeatails['${index + 1}']['colour']}"),
                                     ],
                                   ),
                                 ],
-                              )))
+                              ))
+                          //
+                          )
                       : Container(),
                 ),
               ),

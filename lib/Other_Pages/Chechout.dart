@@ -194,18 +194,6 @@ class _ChechoutState extends State<Chechout> {
                             ),
                             // <-- Text
                           ),
-                          ElevatedButton.icon(
-                            onPressed: () async {},
-                            label: Text(
-                              'Delete from cart',
-                              style: TextStyle(fontSize: scrnheight * 0.02),
-                            ),
-                            icon: Icon(
-                              Icons.delete,
-                              size: scrnheight * 0.03,
-                            ),
-                            // <-- Text
-                          ),
                         ],
                       ),
                     )
