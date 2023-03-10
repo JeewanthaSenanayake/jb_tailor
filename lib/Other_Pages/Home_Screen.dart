@@ -112,8 +112,11 @@ class _State extends State<HomePage> {
                       ],
                     ),
                     onPressed: () async {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => CustomOder(uid: uid, type: "Men",)));
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => CustomOder(
+                                uid: uid,
+                                type: "Men",
+                              )));
                     },
                   ),
                   TextButton(
@@ -135,7 +138,13 @@ class _State extends State<HomePage> {
                         )
                       ],
                     ),
-                    onPressed: () async {},
+                    onPressed: () async {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => CustomOder(
+                                uid: uid,
+                                type: "Women",
+                              )));
+                    },
                   ),
                   TextButton(
                     child: Row(
@@ -156,7 +165,13 @@ class _State extends State<HomePage> {
                         )
                       ],
                     ),
-                    onPressed: () async {},
+                    onPressed: () async {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => CustomOder(
+                                uid: uid,
+                                type: "Kids",
+                              )));
+                    },
                   ),
                 ],
               ),

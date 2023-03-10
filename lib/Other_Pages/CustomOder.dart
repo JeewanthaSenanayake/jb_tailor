@@ -1,5 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'CustomOderStep2.dart';
 import 'DatabaseManager/DatabaseManager.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CustomOder extends StatefulWidget {
   String uid, type;
@@ -42,7 +45,8 @@ class _CustomOderState extends State<CustomOder> {
       address = "",
       TimeDuration = "",
       Note = "",
-      ContactNumber = "";
+      ContactNumber = "",
+      imageValidator = "";
   int quantity = 1;
 
   void incresequantity() {
@@ -59,13 +63,34 @@ class _CustomOderState extends State<CustomOder> {
     });
   }
 
+// select image from galary
+  File? _imageFile;
+  final picker = ImagePicker();
+
+  Future<void> getImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      // Do something with the picked image file, e.g. display it in an Image widget
+      // or upload it to a server
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double scrnwidth = MediaQuery.of(context).size.width;
     double scrnheight = MediaQuery.of(context).size.height;
     if (type == "Men") {
-      ClothTypeDiscrip = "Shirt/Trouser/Short...ect";
+      ClothTypeDiscrip = "shirt/trouser/short...ect";
+    } else if (type == "Women") {
+      ClothTypeDiscrip = "frock/skirt/blouse...etc";
+    } else if (type == "Kids") {
+      ClothTypeDiscrip = "frock/skirt/t-shirt...etc";
     }
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text("Details about the clothing item"),
@@ -203,8 +228,7 @@ class _CustomOderState extends State<CustomOder> {
                           },
                         ),
                         TextFormField(
-                          controller: TextEditingController(
-                              text: userDeatails['address'].toString()),
+                          initialValue:  userDeatails['address'],
                           decoration: InputDecoration(
                             // border: OutlineInputBorder(),
                             labelText: 'Delivery address*',
@@ -219,8 +243,8 @@ class _CustomOderState extends State<CustomOder> {
                             }
                             return null;
                           },
-                          onSaved: (text) {
-                            Colour = text.toString();
+                          onSaved: (text) { 
+                            address = text.toString();
                           },
                         ),
                         TextFormField(
@@ -268,7 +292,62 @@ class _CustomOderState extends State<CustomOder> {
                           },
                         ),
                         Container(
-                          margin: EdgeInsets.only(top: scrnheight * 0.03),
+                          alignment: Alignment.topLeft,
+                          child: TextButton(
+                            child: Column(
+                              children: [
+                                Container(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    'Browse image*',
+                                    style: TextStyle(
+                                      fontSize: scrnheight * 0.02,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    imageValidator,
+                                    style: TextStyle(
+                                      fontSize: scrnheight * 0.0125,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                            onPressed: () async {
+                              getImage();
+                            },
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.topLeft,
+                          child: _imageFile != null
+                              ? GestureDetector(
+                                  onTap: () {
+                                    getImage();
+                                  },
+                                  child: Image.file(
+                                    _imageFile!,
+                                    width: scrnwidth * 0.5,
+                                  ))
+                              : Container(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      getImage();
+                                    },
+                                    child: Image.asset(
+                                      "assets/home/lodeImg.jpg",
+                                      width: scrnwidth * 0.5,
+                                      // width: 70,
+                                    ),
+                                  ),
+                                ),
+                        ),
+                        Container(
                           alignment: Alignment.bottomRight,
                           child: TextButton(
                             child: Text(
@@ -280,9 +359,31 @@ class _CustomOderState extends State<CustomOder> {
                             ),
                             onPressed: () async {
                               _formkey1.currentState!.save();
-                              if (_formkey1.currentState!.validate()) {
-                                print(
-                                    "$ClothType $FabricType  $Colour $address $TimeDuration $Note $ContactNumber $quantity");
+                              if (_imageFile == null) {
+                                setState(() {
+                                  imageValidator =
+                                      "Plese select a image from your galary";
+                                });
+                              }
+                              if (_formkey1.currentState!.validate() &&
+                                  _imageFile != null) {
+                                dynamic data = {
+                                  "ClothType": ClothType,
+                                  "FabricType": FabricType,
+                                  "Colour": Colour,
+                                  "address": address,
+                                  "TimeDuration": TimeDuration,
+                                  "Note": Note,
+                                  "ContactNumber": ContactNumber,
+                                  "quantity": quantity
+                                };
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => CustomOderStep2(
+                                          uid: uid,
+                                          type: type,
+                                          data: data,
+                                          imageFile: _imageFile,
+                                        )));
                               }
                             },
                           ),

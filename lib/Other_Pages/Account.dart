@@ -127,6 +127,7 @@ class _State extends State<AccountPage> {
                             if (text.toString().isEmpty) {
                               return '$selector cannot be empty';
                             }
+                            return null;
                           },
                           onSaved: (text) {
                             newValue = text.toString();
