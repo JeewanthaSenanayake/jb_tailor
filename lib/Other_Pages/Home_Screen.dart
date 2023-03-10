@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:jb_tailor/Other_Pages/CustomOder.dart';
 
 import 'package:jb_tailor/Other_Pages/Kids.dart';
 import 'package:jb_tailor/Other_Pages/Men.dart';
@@ -75,8 +75,8 @@ class _State extends State<HomePage> {
             MaterialPageRoute(builder: (context) => AccountPage(uid: uid)));
       }
       if (index == 2) {
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => cart(uid: uid)));
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => cart(uid: uid)));
       }
     });
   }
@@ -111,7 +111,10 @@ class _State extends State<HomePage> {
                         )
                       ],
                     ),
-                    onPressed: () async {},
+                    onPressed: () async {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => CustomOder(uid: uid, type: "Men",)));
+                    },
                   ),
                   TextButton(
                     child: Row(
@@ -246,7 +249,9 @@ class _State extends State<HomePage> {
                               GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => WomenPage(uid: uid,)));
+                                      builder: (context) => WomenPage(
+                                            uid: uid,
+                                          )));
                                   print("woman");
                                 },
                                 child: Image.asset(
@@ -263,7 +268,9 @@ class _State extends State<HomePage> {
                               GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => KidsPage(uid: uid,)));
+                                      builder: (context) => KidsPage(
+                                            uid: uid,
+                                          )));
                                   print("kids");
                                 },
                                 child: Image.asset(

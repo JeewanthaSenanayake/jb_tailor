@@ -55,8 +55,8 @@ class _State extends State<AccountPage> {
             MaterialPageRoute(builder: (context) => AccountPage(uid: uid)));
       }
       if (index == 2) {
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => cart(uid: uid)));
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => cart(uid: uid)));
       }
     });
   }
@@ -89,7 +89,9 @@ class _State extends State<AccountPage> {
                     alignment: Alignment.topRight,
                     child: TextButton(
                       child: const Text("No"),
-                      onPressed: () {Navigator.of(context).pop();},
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
                     ),
                   ),
                 ],
@@ -116,14 +118,14 @@ class _State extends State<AccountPage> {
                   child: Column(
                     children: [
                       TextFormField(
-                        maxLength: 30,
+                          maxLength: 30,
                           controller: TextEditingController(text: value),
                           decoration: InputDecoration(
                             labelText: "Enter your $selector",
                           ),
                           validator: (text) {
                             if (text.toString().isEmpty) {
-                              return 'Email cannot be empty';
+                              return '$selector cannot be empty';
                             }
                           },
                           onSaved: (text) {

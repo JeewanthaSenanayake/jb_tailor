@@ -78,7 +78,7 @@ class _State extends State<KidsPage> {
     double scrnheight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Kids"),
+        title: const Text("Kids"),
       ),
       body: SingleChildScrollView(
           child: loading
