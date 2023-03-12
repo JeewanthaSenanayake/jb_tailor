@@ -18,11 +18,51 @@ class _CustomOderState extends State<CustomOder> {
 
   bool loading = true;
 
+  // for input data
+  String FabricType = "",
+      Colour = "",
+      address = "",
+      TimeDuration = "",
+      Note = "",
+      ContactNumber = "",
+      imageValidator = "";
+  int quantity = 1;
+
+  //for dropdown menu
+  List<DropdownMenuItem<String>> dropdownItems = [];
+  String? SelectedType = "";
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getUserDeatails();
+
+    if (type == "Men") {
+      //create dropdown array
+      List<String> items = ["Shirt", "Trouser"];
+      for (String item in items) {
+        dropdownItems.add(
+          DropdownMenuItem(
+            value: item,
+            child: Text(item),
+          ),
+        );
+      }
+      SelectedType = items[0];
+    } else if (type == "Women") {
+      //create dropdown array
+      List<String> items = ["Skirt", "Blouse", "Frock"];
+      for (String item in items) {
+        dropdownItems.add(
+          DropdownMenuItem(
+            value: item,
+            child: Text(item),
+          ),
+        );
+      }
+      SelectedType = items[0];
+    } else if (type == "Kids") {}
   }
 
   //get data
@@ -37,17 +77,6 @@ class _CustomOderState extends State<CustomOder> {
   }
 
   final GlobalKey<FormState> _formkey1 = GlobalKey<FormState>();
-
-  String ClothType = "",
-      FabricType = "",
-      ClothTypeDiscrip = "",
-      Colour = "",
-      address = "",
-      TimeDuration = "",
-      Note = "",
-      ContactNumber = "",
-      imageValidator = "";
-  int quantity = 1;
 
   void incresequantity() {
     setState(() {
@@ -83,14 +112,7 @@ class _CustomOderState extends State<CustomOder> {
   Widget build(BuildContext context) {
     double scrnwidth = MediaQuery.of(context).size.width;
     double scrnheight = MediaQuery.of(context).size.height;
-    if (type == "Men") {
-      ClothTypeDiscrip = "shirt/trouser/short...ect";
-    } else if (type == "Women") {
-      ClothTypeDiscrip = "frock/skirt/blouse...etc";
-    } else if (type == "Kids") {
-      ClothTypeDiscrip = "frock/skirt/t-shirt...etc";
-    }
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Details about the clothing item"),
@@ -110,25 +132,26 @@ class _CustomOderState extends State<CustomOder> {
                     key: _formkey1,
                     child: Column(
                       children: [
-                        TextFormField(
-                          decoration: InputDecoration(
-                            // border: OutlineInputBorder(),
-                            labelText: 'Cloth type*',
-                            labelStyle: TextStyle(
-                              fontSize: scrnheight * 0.02,
-                              color: Colors.black,
+                        Row(
+                          children: [
+                            Text(
+                              "Cloth type  \t\t",
+                              style: TextStyle(
+                                fontSize: scrnheight * 0.02,
+                                color: Colors.black,
+                              ),
                             ),
-                            hintText: ClothTypeDiscrip,
-                          ),
-                          validator: (text) {
-                            if (text.toString().isEmpty) {
-                              return 'Cloth type can not be empty';
-                            }
-                            return null;
-                          },
-                          onSaved: (text) {
-                            ClothType = text.toString();
-                          },
+                            //display dropdown menu
+                            DropdownButton(
+                              value: SelectedType,
+                              items: dropdownItems,
+                              onChanged: (value) {
+                                setState(() {
+                                  SelectedType = value;
+                                });
+                              },
+                            ),
+                          ],
                         ),
                         TextFormField(
                           decoration: InputDecoration(
@@ -228,7 +251,7 @@ class _CustomOderState extends State<CustomOder> {
                           },
                         ),
                         TextFormField(
-                          initialValue:  userDeatails['address'],
+                          initialValue: userDeatails['address'],
                           decoration: InputDecoration(
                             // border: OutlineInputBorder(),
                             labelText: 'Delivery address*',
@@ -243,7 +266,7 @@ class _CustomOderState extends State<CustomOder> {
                             }
                             return null;
                           },
-                          onSaved: (text) { 
+                          onSaved: (text) {
                             address = text.toString();
                           },
                         ),
@@ -368,7 +391,7 @@ class _CustomOderState extends State<CustomOder> {
                               if (_formkey1.currentState!.validate() &&
                                   _imageFile != null) {
                                 dynamic data = {
-                                  "ClothType": ClothType,
+                                  "ClothType": SelectedType,
                                   "FabricType": FabricType,
                                   "Colour": Colour,
                                   "address": address,
@@ -377,6 +400,7 @@ class _CustomOderState extends State<CustomOder> {
                                   "ContactNumber": ContactNumber,
                                   "quantity": quantity
                                 };
+
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => CustomOderStep2(
                                           uid: uid,

@@ -9,6 +9,10 @@ class DatabaseManager {
         .collection("cart")
         .doc(uid)
         .set({"oderID": 0});
+    await FirebaseFirestore.instance
+        .collection("customOder")
+        .doc(uid)
+        .set({"oderID": 0});
     return await profileList
         .doc(uid)
         .set({'name': name, 'address': address, 'email': email});
@@ -116,6 +120,34 @@ class DatabaseManager {
       newItemId.toString(): data,
     };
     return await cartList.update(oder);
+  }
+
+  //Add custom oders
+  Future<dynamic> addCustomOder(
+      String uid, dynamic basicData, dynamic dataMeasurements) async {
+    final customOderList =
+        FirebaseFirestore.instance.collection("customOder").doc(uid);
+    dynamic itemId;
+    try {
+      await customOderList.get().then((QuerySnapshot) {
+        itemId = QuerySnapshot.data();
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+
+    dynamic newItemId = itemId["oderID"] + 1;
+    dynamic data = {
+      "isPending": 2,
+      "basicData": basicData,
+      "dataMeasurements": dataMeasurements
+    };
+
+    dynamic oder = {
+      "oderID": newItemId,
+      newItemId.toString(): data,
+    };
+    return await customOderList.update(oder);
   }
 
   //get data from cart
