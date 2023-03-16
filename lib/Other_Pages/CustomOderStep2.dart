@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:jb_tailor/Other_Pages/DatabaseManager/DatabaseManager.dart';
+import 'package:jb_tailor/Other_Pages/Oder.dart';
 
 class CustomOderStep2 extends StatefulWidget {
   String uid, type;
@@ -119,6 +120,7 @@ class _CustomOderStep2State extends State<CustomOderStep2> {
         });
   }
 
+  bool _isLoading = false;
   @override
   Widget build(BuildContext context) {
     double scrnwidth = MediaQuery.of(context).size.width;
@@ -159,15 +161,27 @@ class _CustomOderStep2State extends State<CustomOderStep2> {
                   children: TextForm,
                 )),
           ),
-          TextButton(
-            child: Text(
-              'Next',
-              style: TextStyle(
-                  fontSize: scrnheight * 0.025,
-                  color: Colors.orange,
-                  fontWeight: FontWeight.bold),
-            ),
+          ElevatedButton(
+            child: _isLoading
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                      color: Colors.white,
+                    ),
+                  )
+                : Text(
+                    'Submit',
+                    style: TextStyle(
+                        fontSize: scrnheight * 0.025,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
             onPressed: () async {
+              setState(() {
+                _isLoading = true;
+              });
               _formkey1.currentState!.save();
               if (_formkey1.currentState!.validate()) {
                 String URL = await uploadImage();
@@ -179,6 +193,13 @@ class _CustomOderStep2State extends State<CustomOderStep2> {
                   };
                   await DatabaseManager()
                       .addCustomOder(uid, data, dataMeasurements);
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => Oder(
+                            uid: uid,
+                          )));
                 }
               }
             },

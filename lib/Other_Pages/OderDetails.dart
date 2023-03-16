@@ -56,6 +56,7 @@ class _State extends State<OderDetailsPage> {
     });
   }
 
+  bool _isLoading = false;
   @override
   Widget build(BuildContext context) {
     double scrnwidth = MediaQuery.of(context).size.width;
@@ -343,6 +344,9 @@ class _State extends State<OderDetailsPage> {
                     ),
                     ElevatedButton.icon(
                       onPressed: () async {
+                        setState(() {
+                          _isLoading = true;
+                        });
                         await DatabaseManager().addToCart(
                             uid,
                             imgId,
@@ -353,13 +357,25 @@ class _State extends State<OderDetailsPage> {
                             data['price'].toString(),
                             link,
                             type);
+                            setState(() {
+                          _isLoading = false;
+                        });
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => cart(uid: uid)));
                       },
-                      label: Text(
-                        'Add cart',
-                        style: TextStyle(fontSize: scrnheight * 0.02),
-                      ),
+                      label: _isLoading
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 3,
+                                color: Colors.white,
+                              ),
+                            )
+                          : Text(
+                              'Add cart',
+                              style: TextStyle(fontSize: scrnheight * 0.02),
+                            ),
                       icon: Icon(
                         Icons.shopping_cart,
                         size: scrnheight * 0.05,

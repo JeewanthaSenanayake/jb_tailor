@@ -8,6 +8,8 @@ import 'package:jb_tailor/Other_Pages/Account.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:jb_tailor/Other_Pages/cart.dart';
 
+import 'Oder.dart';
+
 class HomePage extends StatefulWidget {
   String uid;
   HomePage({required this.uid});
@@ -62,13 +64,9 @@ class _State extends State<HomePage> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      if (index == 3) {
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => AccountPage(uid: uid)));
-      }
-      if (index == 0) {
+      if (index == 1) {
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => HomePage(uid: uid)));
+            .push(MaterialPageRoute(builder: (context) => Oder(uid: uid)));
       }
       if (index == 3) {
         Navigator.of(context).push(

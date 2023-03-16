@@ -4,6 +4,7 @@ import 'Login_Screen.dart';
 import 'package:jb_tailor/Other_Pages/Home_Screen.dart';
 import 'package:jb_tailor/Other_Pages/Services/AuthenticationServices.dart';
 import 'DatabaseManager/DatabaseManager.dart';
+import 'Oder.dart';
 
 class AccountPage extends StatefulWidget {
   String uid;
@@ -50,9 +51,9 @@ class _State extends State<AccountPage> {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => HomePage(uid: uid)));
       }
-      if (index == 3) {
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => AccountPage(uid: uid)));
+      if (index == 1) {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => Oder(uid: uid)));
       }
       if (index == 2) {
         Navigator.of(context)

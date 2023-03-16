@@ -3,6 +3,7 @@ import 'package:jb_tailor/Other_Pages/Account.dart';
 import 'package:jb_tailor/Other_Pages/Chechout.dart';
 import 'package:jb_tailor/Other_Pages/Home_Screen.dart';
 import 'DatabaseManager/DatabaseManager.dart';
+import 'Oder.dart';
 
 class cart extends StatefulWidget {
   String uid;
@@ -39,6 +40,10 @@ class _cartState extends State<cart> {
       if (index == 0) {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => HomePage(uid: uid)));
+      }
+      if (index == 1) {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => Oder(uid: uid)));
       }
       if (index == 3) {
         Navigator.of(context).push(
