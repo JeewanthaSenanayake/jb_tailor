@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:jb_tailor/Other_Pages/DatabaseManager/DatabaseManager.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import '../DatabaseManager/DatabaseManager.dart';
 
 class AuthenticationServices {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -14,6 +14,7 @@ class AuthenticationServices {
   }
 
   //google
+
 
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 

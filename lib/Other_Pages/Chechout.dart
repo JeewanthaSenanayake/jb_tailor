@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jb_tailor/Other_Pages/DatabaseManager/DatabaseManager.dart';
 
+import 'OnlinePayment/OnlinePayment.dart';
+
 class Chechout extends StatefulWidget {
   String uid;
   dynamic cartData;
@@ -43,6 +45,7 @@ class _ChechoutState extends State<Chechout> {
     });
   }
 
+  bool _isLoading = false;
   @override
   Widget build(BuildContext context) {
     double scrnwidth = MediaQuery.of(context).size.width;
@@ -183,11 +186,35 @@ class _ChechoutState extends State<Chechout> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ElevatedButton.icon(
-                            onPressed: () async {},
-                            label: Text(
-                              'Place oder',
-                              style: TextStyle(fontSize: scrnheight * 0.02),
-                            ),
+                            onPressed: () async {
+                              int amount = ((adminData['deliveryFee'] +
+                                          cartData['quantity'] *
+                                              double.parse(cartData['price'])) *
+                                      100)
+                                  .toInt();
+                              setState(() {
+                                _isLoading = true;
+                              });
+                              print(
+                                  "######################### ${await OnlinePayment().makePayment(amount.toString())}");
+                              setState(() {
+                                _isLoading = false;
+                              });
+                            },
+                            label: _isLoading
+                                ? const SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 3,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : Text(
+                                    'Place oder',
+                                    style:
+                                        TextStyle(fontSize: scrnheight * 0.02),
+                                  ),
                             icon: Icon(
                               Icons.payment,
                               size: scrnheight * 0.03,
