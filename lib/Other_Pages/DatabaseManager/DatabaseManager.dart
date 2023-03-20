@@ -114,6 +114,7 @@ class DatabaseManager {
       'isPending': 1,
       'price': price,
       'link': link,
+      'status' : "not yet pay"
     };
 
     dynamic oder = {
@@ -140,8 +141,9 @@ class DatabaseManager {
     dynamic newItemId = itemId["oderID"] + 1;
     dynamic data = {
       "oderType": "custom",
-      "isPending": 2,
+      "isPending": 1,
       'price': "Pending",
+      'status' : "not yet pay",
       "basicData": basicData,
       "dataMeasurements": dataMeasurements
     };

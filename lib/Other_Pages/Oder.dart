@@ -80,8 +80,7 @@ class _OderState extends State<Oder> {
                                 oderDeatails['$i']['basicData']['ClothType']),
                           ),
                           oderDeatails['$i']['price'] != "Pending"
-                              ? IconButton(
-                                
+                              ? IconButton(                         
                                   onPressed: () async {
                                     
                                   },
