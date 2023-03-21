@@ -114,7 +114,7 @@ class DatabaseManager {
       'isPending': 1,
       'price': price,
       'link': link,
-      'status' : "not yet pay"
+      'status': "not yet pay"
     };
 
     dynamic oder = {
@@ -143,7 +143,7 @@ class DatabaseManager {
       "oderType": "custom",
       "isPending": 1,
       'price': "Pending",
-      'status' : "not yet pay",
+      'status': "not yet pay",
       "basicData": basicData,
       "dataMeasurements": dataMeasurements
     };
@@ -192,6 +192,59 @@ class DatabaseManager {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  //cart payment sucsessful
+  Future<dynamic> cartToOder(
+      dynamic cartData, String oderID, String uid) async {
+    await deleteItemFromCart(uid, int.parse(oderID), cartData);
+    final customOderList =
+        FirebaseFirestore.instance.collection("Oder").doc(uid);
+    dynamic itemId;
+    try {
+      await customOderList.get().then((QuerySnapshot) {
+        itemId = QuerySnapshot.data();
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+    dynamic newItemId = itemId["oderID"] + 1;
+
+    cartData["isPending"] = 2;
+    cartData["status"] = "Rapping your oder";
+    dynamic oder = {
+      "oderID": newItemId,
+      newItemId.toString(): cartData,
+    };
+    return await customOderList.update(oder);
+  }
+
+  //custom oder payment sucsessful
+  Future<dynamic> customOderPaymentSucsessful(
+      dynamic cartData, String oderID, String uid) async {
+    final customOderList =
+        FirebaseFirestore.instance.collection("Oder").doc(uid);
+
+    cartData["isPending"] = 2;
+    cartData["status"] = "Working with your oder";
+    dynamic oder = {
+      oderID: cartData,
+    };
+    return await customOderList.update(oder);
+  }
+
+  //oder resived
+    Future<dynamic> oderResived(
+      dynamic cartData, String oderID, String uid) async {
+    final customOderList =
+        FirebaseFirestore.instance.collection("Oder").doc(uid);
+
+    cartData["isPending"] = 4;
+    cartData["status"] = "Oder Resived";
+    dynamic oder = {
+      oderID: cartData,
+    };
+    return await customOderList.update(oder);
   }
 
   //For Admin

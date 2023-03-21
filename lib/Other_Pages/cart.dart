@@ -24,12 +24,134 @@ class _cartState extends State<cart> {
     getCart();
   }
 
+  List<GestureDetector> cartItems = [];
+  double scrnwidth = 0;
+  double scrnheight = 0;
   dynamic oderDeatails;
   getCart() async {
     dynamic oder = await DatabaseManager().getFromCart(uid);
     setState(() {
       oderDeatails = oder;
       loading = false;
+
+      if (oderDeatails['oderID'] == 0) {
+        cartItems.add(GestureDetector(
+          onTap: (() {}),
+          child: Container(
+            alignment: Alignment.center,
+            child: const Padding(
+              padding: EdgeInsets.all(30),
+              child: Text(
+                "No any thing in cart",
+                style: TextStyle(color: Colors.grey, fontSize: 24),
+              ),
+            ),
+          ),
+        ));
+      }
+      bool isOderHear = true;
+
+      for (int index = 0; index < oderDeatails['oderID']; index++) {
+        if (oderDeatails['${index + 1}']['isPending'] == 1) {
+          cartItems.add(GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Chechout(
+                            uid: uid,
+                            cartData: oderDeatails['${index + 1}'],
+                            oderID: (index + 1).toString(),
+                          )),
+                );
+              },
+              child: Container(
+                  // width: double.infinity,
+                  height: scrnheight * 0.125,
+                  margin: EdgeInsets.all(scrnheight * 0.01),
+                  padding: EdgeInsets.all(scrnheight * 0.01),
+                  decoration: const BoxDecoration(
+                    color: Color.fromARGB(255, 189, 188, 188),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color.fromARGB(120, 0, 0, 0),
+                        offset: Offset(0, 5),
+                        blurRadius: 10,
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      Column(
+                        children: [
+                          SizedBox(
+                            width: scrnheight * 0.1,
+                            height: scrnheight * 0.1,
+                            child: Image.network(
+                              oderDeatails['${index + 1}']['link'],
+                            ),
+                          ),
+                          // Text("Delete"),
+                        ],
+                      ),
+                      SizedBox(width: scrnwidth * 0.015),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: scrnwidth * 0.585,
+                                child: Text(
+                                    oderDeatails['${index + 1}']['oderName']),
+                              ),
+                              IconButton(
+                                  onPressed: () async {
+                                    await DatabaseManager().deleteItemFromCart(
+                                        uid,
+                                        (index + 1),
+                                        oderDeatails['${index + 1}']);
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                cart(uid: uid)));
+                                  },
+                                  icon: const Icon(Icons.delete))
+                            ],
+                          ),
+                          Text(
+                            "Rs: ${oderDeatails['${index + 1}']['price']}",
+                            style: const TextStyle(
+                              color: Colors.deepOrange,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                              "Size: ${oderDeatails['${index + 1}']['size']} \t Quantity: ${oderDeatails['${index + 1}']['quantity']} \t Colour: ${oderDeatails['${index + 1}']['colour']}"),
+                        ],
+                      ),
+                    ],
+                  ))
+              //
+              ));
+        } else if (isOderHear) {
+          isOderHear = false;
+          cartItems.add(GestureDetector(
+            onTap: (() {}),
+            child: Container(
+              alignment: Alignment.center,
+              child: const Padding(
+                padding: EdgeInsets.all(30),
+                child: Text(
+                  "No any thing in cart",
+                  style: TextStyle(color: Colors.grey, fontSize: 24),
+                ),
+              ),
+            ),
+          ));
+        }
+      }
     });
   }
 
@@ -52,10 +174,13 @@ class _cartState extends State<cart> {
     });
   }
 
+  bool isOderHear = true;
   @override
   Widget build(BuildContext context) {
-    double scrnwidth = MediaQuery.of(context).size.width;
-    double scrnheight = MediaQuery.of(context).size.height;
+    setState(() {
+      scrnwidth = MediaQuery.of(context).size.width;
+      scrnheight = MediaQuery.of(context).size.height;
+    });
     return Scaffold(
       appBar: AppBar(
         title: const Text("Cart"),
@@ -69,97 +194,7 @@ class _cartState extends State<cart> {
                   child: CircularProgressIndicator(),
                 ))
             : Column(
-                children: List.generate(
-                  oderDeatails['oderID'],
-                  (index) => oderDeatails['${index + 1}']['isPending'] == 1
-                      ? GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Chechout(
-                                        uid: uid,
-                                        cartData: oderDeatails['${index + 1}'],
-                                        oderID: (index + 1).toString(),
-                                      )),
-                            );
-                          },
-                          child: Container(
-                              // width: double.infinity,
-                              height: scrnheight * 0.125,
-                              margin: EdgeInsets.all(scrnheight * 0.01),
-                              padding: EdgeInsets.all(scrnheight * 0.01),
-                              decoration: const BoxDecoration(
-                                color: Color.fromARGB(255, 189, 188, 188),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Color.fromARGB(120, 0, 0, 0),
-                                    offset: Offset(0, 5),
-                                    blurRadius: 10,
-                                  ),
-                                ],
-                              ),
-                              child: Row(
-                                children: [
-                                  Column(
-                                    children: [
-                                      SizedBox(
-                                        width: scrnheight * 0.1,
-                                        height: scrnheight * 0.1,
-                                        child: Image.network(
-                                          oderDeatails['${index + 1}']['link'],
-                                        ),
-                                      ),
-                                      // Text("Delete"),
-                                    ],
-                                  ),
-                                  SizedBox(width: scrnwidth * 0.015),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          SizedBox(
-                                            width: scrnwidth * 0.585,
-                                            child: Text(
-                                                oderDeatails['${index + 1}']
-                                                    ['oderName']),
-                                          ),
-                                          IconButton(
-                                              onPressed: () async {
-                                                await DatabaseManager()
-                                                    .deleteItemFromCart(
-                                                        uid,
-                                                        (index + 1),
-                                                        oderDeatails[
-                                                            '${index + 1}']);
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            cart(uid: uid)));
-                                              },
-                                              icon: const Icon(Icons.delete))
-                                        ],
-                                      ),
-                                      Text(
-                                        "Rs: ${oderDeatails['${index + 1}']['price']}",
-                                        style: const TextStyle(
-                                          color: Colors.deepOrange,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Text(
-                                          "Size: ${oderDeatails['${index + 1}']['size']} \t Quantity: ${oderDeatails['${index + 1}']['quantity']} \t Colour: ${oderDeatails['${index + 1}']['colour']}"),
-                                    ],
-                                  ),
-                                ],
-                              ))
-                          //
-                          )
-                      : Container(),
-                ),
+                children: cartItems,
               ),
       ),
       bottomNavigationBar: BottomNavigationBar(

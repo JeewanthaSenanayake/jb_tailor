@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jb_tailor/Other_Pages/DatabaseManager/DatabaseManager.dart';
 
+import 'Oder.dart';
 import 'OnlinePayment/OnlinePayment.dart';
 
 class Chechout extends StatefulWidget {
@@ -195,8 +196,15 @@ class _ChechoutState extends State<Chechout> {
                               setState(() {
                                 _isLoading = true;
                               });
-                              print(
-                                  "######################### ${await OnlinePayment().makePayment(amount.toString())}");
+                              if (await OnlinePayment()
+                                  .makePayment(amount.toString())) {
+                                await DatabaseManager()
+                                    .cartToOder(cartData, oderID, uid);
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => Oder(
+                                          uid: uid,
+                                        )));
+                              }
                               setState(() {
                                 _isLoading = false;
                               });

@@ -1,0 +1,5 @@
+0 = delete
+1 = display on cart
+2 = payment done
+3 = send oder
+4 = resive oder
