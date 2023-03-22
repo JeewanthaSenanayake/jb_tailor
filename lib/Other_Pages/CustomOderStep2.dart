@@ -35,43 +35,77 @@ class _CustomOderStep2State extends State<CustomOderStep2> {
   void initState() {
     super.initState();
     if (data['ClothType'] == "Skirt") {
-      inputDataName = ["Waist", "Hips", "Waist to length", "Crotch length"];
-      for (String name in inputDataName) {
-        TextForm.add(
-          TextFormField(
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              // border: OutlineInputBorder(),
-              labelText: "$name*",
-              labelStyle: const TextStyle(
-                // fontSize: scrnheight * 0.02,
-                color: Colors.black,
-              ),
-              // hintText: ClothTypeDiscrip,
+      inputDataName = [
+        "Waist",
+        "Hips",
+        "Waist to length",
+        "Crotch length",
+        "Inseam"
+      ];
+    } else if (data['ClothType'] == "Blouse") {
+      inputDataName = [
+        "Bust",
+        "Waist",
+        "Bust Apex",
+        "Shoulder",
+        "Neck to Waist - Front",
+        "Neck to Waist - Back",
+        "Arm/ Sleev Length",
+        "Shoulder to Elbow length"
+      ];
+    } else if (data['ClothType'] == "Frock") {
+      inputDataName = [
+        "Bust",
+        "Waist",
+        "Hips",
+        "Bust Apex",
+        "Shoulder",
+        "Neck to Waist - Front",
+        "Neck to Waist - Back",
+        "Waist to Length",
+        "Crotch Length",
+        "Arm/ Sleev Length",
+        "Height",
+        "Inseam",
+        "Shoulder to Elbow length",
+        "Neck"
+      ];
+    }
+    for (String name in inputDataName) {
+      TextForm.add(
+        TextFormField(
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            // border: OutlineInputBorder(),
+            labelText: "$name*",
+            labelStyle: const TextStyle(
+              // fontSize: scrnheight * 0.02,
+              color: Colors.black,
             ),
-            validator: (text) {
-              if (text.toString().isEmpty) {
-                return '$name can not be empty';
-              }
-              final doubleNumber = double.tryParse(text!);
-              final intNumber = int.tryParse(text);
-              if (doubleNumber == null && intNumber == null) {
-                return 'Invalide $name';
-              }
-              if (double.parse(text) <= 0) {
-                return '$name can not be zero or negative';
-              }
-
-              return null;
-            },
-            onSaved: (text) {
-              if (_formkey1.currentState!.validate()) {
-                inputData.add({name: text.toString()});
-              }
-            },
+            // hintText: ClothTypeDiscrip,
           ),
-        );
-      }
+          validator: (text) {
+            if (text.toString().isEmpty) {
+              return '$name can not be empty';
+            }
+            final doubleNumber = double.tryParse(text!);
+            final intNumber = int.tryParse(text);
+            if (doubleNumber == null && intNumber == null) {
+              return 'Invalide $name';
+            }
+            if (double.parse(text) <= 0) {
+              return '$name can not be zero or negative';
+            }
+
+            return null;
+          },
+          onSaved: (text) {
+            if (_formkey1.currentState!.validate()) {
+              inputData.add({name: text.toString()});
+            }
+          },
+        ),
+      );
     }
   }
 
@@ -100,12 +134,14 @@ class _CustomOderStep2State extends State<CustomOderStep2> {
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
-              title: const Text('Refer this image as guide'),
+              // title: const Text('Refer this image as guide'),
               children: <Widget>[
-                Image.asset(
-                  "assets/Guide/women_guide.png",
-                  width: scrnwidth,
-                  // width: 70,
+                InteractiveViewer(
+                  child: Image.asset(
+                    "assets/Guide/women_guide.jpg",
+                    width: scrnwidth,
+                    // width: 70,
+                  ),
                 ),
                 Container(
                   alignment: Alignment.bottomCenter,
@@ -137,19 +173,27 @@ class _CustomOderStep2State extends State<CustomOderStep2> {
             alignment: Alignment.center,
             child: Column(
               children: [
+                Container(
+                  alignment: Alignment.topRight,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        showGuideImage(scrnheight, scrnwidth);
+                      },
+                      child: Text(
+                        "Get guide Image",
+                        style: TextStyle(
+                            fontSize: scrnheight * 0.02, color: Colors.yellow),
+                      )),
+                ),
                 Image.file(
                   imageFile,
                   height: scrnwidth * 0.5,
                 ),
-                TextButton(
-                    onPressed: () {
-                      showGuideImage(scrnheight, scrnwidth);
-                    },
-                    child: Text(
-                      "Get guide Image",
-                      style: TextStyle(
-                          fontSize: scrnheight * 0.02, color: Colors.red),
-                    ))
+                Container(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    alignment: Alignment.bottomLeft,
+                    child:
+                        const Text("Please input all measurements are in cm"))
               ],
             ),
           ),
@@ -179,11 +223,11 @@ class _CustomOderStep2State extends State<CustomOderStep2> {
                         fontWeight: FontWeight.bold),
                   ),
             onPressed: () async {
-              setState(() {
-                _isLoading = true;
-              });
               _formkey1.currentState!.save();
               if (_formkey1.currentState!.validate()) {
+                setState(() {
+                  _isLoading = true;
+                });
                 String URL = await uploadImage();
                 if (URL != "fail") {
                   inputData.add({"url": URL});
