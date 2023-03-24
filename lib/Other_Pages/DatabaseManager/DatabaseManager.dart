@@ -234,7 +234,7 @@ class DatabaseManager {
   }
 
   //oder resived
-    Future<dynamic> oderResived(
+  Future<dynamic> oderResived(
       dynamic cartData, String oderID, String uid) async {
     final customOderList =
         FirebaseFirestore.instance.collection("Oder").doc(uid);
@@ -245,6 +245,24 @@ class DatabaseManager {
       oderID: cartData,
     };
     return await customOderList.update(oder);
+  }
+
+  //get all data
+  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getDocuments(String type) async {
+    final QuerySnapshot<Map<String, dynamic>> snapshot =
+        await FirebaseFirestore.instance.collection(type).get();
+
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> docData=[];
+
+    if (snapshot.docs.isNotEmpty) {
+      for (final QueryDocumentSnapshot<Map<String, dynamic>> document
+          in snapshot.docs) {
+        docData.add(document);
+      }
+    } else {
+      print('No documents found.');
+    }
+    return docData;
   }
 
   //For Admin

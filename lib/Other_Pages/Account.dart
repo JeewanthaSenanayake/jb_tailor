@@ -5,6 +5,7 @@ import 'package:jb_tailor/Other_Pages/Home_Screen.dart';
 import 'package:jb_tailor/Other_Pages/Services/AuthenticationServices.dart';
 import 'DatabaseManager/DatabaseManager.dart';
 import 'Oder.dart';
+import 'NormalOder.dart';
 
 class AccountPage extends StatefulWidget {
   String uid;

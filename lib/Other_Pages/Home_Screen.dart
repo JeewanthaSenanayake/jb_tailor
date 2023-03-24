@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:jb_tailor/Other_Pages/CustomOder.dart';
-
-import 'package:jb_tailor/Other_Pages/Kids.dart';
-import 'package:jb_tailor/Other_Pages/Men.dart';
-import 'package:jb_tailor/Other_Pages/Women.dart';
 import 'package:jb_tailor/Other_Pages/Account.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:jb_tailor/Other_Pages/cart.dart';
 
+import 'NormalOder.dart';
 import 'Oder.dart';
 
 class HomePage extends StatefulWidget {
@@ -245,9 +242,11 @@ class _State extends State<HomePage> {
                             Column(children: [
                               GestureDetector(
                                 onTap: () {
-                                  print("man");
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => MenPage(uid: uid)));
+                                      builder: (context) => NormalOder(
+                                            uid: uid,
+                                            type: "men",
+                                          )));
                                 },
                                 child: Image.asset(
                                   "assets/home/men.png",
@@ -255,17 +254,17 @@ class _State extends State<HomePage> {
                                   // width: 70,
                                 ),
                               ),
-                              Text("Men"),
+                              const Text("Men"),
                             ]),
                             SizedBox(width: scrnwidth * 0.175),
                             Column(children: [
                               GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => WomenPage(
+                                      builder: (context) => NormalOder(
                                             uid: uid,
+                                            type: "women",
                                           )));
-                                  print("woman");
                                 },
                                 child: Image.asset(
                                   "assets/home/women.png",
@@ -273,7 +272,7 @@ class _State extends State<HomePage> {
                                   // width: 70,
                                 ),
                               ),
-                              Text("Women"),
+                              const Text("Women"),
                             ]),
                             // const SizedBox(width: 50),
                             SizedBox(width: scrnwidth * 0.175),
@@ -281,10 +280,10 @@ class _State extends State<HomePage> {
                               GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => KidsPage(
+                                      builder: (context) => NormalOder(
                                             uid: uid,
+                                            type: "kids",
                                           )));
-                                  print("kids");
                                 },
                                 child: Image.asset(
                                   "assets/home/kids.png",
@@ -292,7 +291,7 @@ class _State extends State<HomePage> {
                                   // width: 70,
                                 ),
                               ),
-                              Text("Kids"),
+                              const Text("Kids"),
                             ]),
                           ],
                         ),
