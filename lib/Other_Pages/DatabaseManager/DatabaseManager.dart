@@ -248,11 +248,12 @@ class DatabaseManager {
   }
 
   //get all data
-  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getDocuments(String type) async {
+  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getDocuments(
+      String type) async {
     final QuerySnapshot<Map<String, dynamic>> snapshot =
         await FirebaseFirestore.instance.collection(type).get();
 
-    List<QueryDocumentSnapshot<Map<String, dynamic>>> docData=[];
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> docData = [];
 
     if (snapshot.docs.isNotEmpty) {
       for (final QueryDocumentSnapshot<Map<String, dynamic>> document
@@ -263,6 +264,64 @@ class DatabaseManager {
       print('No documents found.');
     }
     return docData;
+  }
+
+  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> trending() async {
+    //men
+    final QuerySnapshot<Map<String, dynamic>> snapshotMen =
+        await FirebaseFirestore.instance.collection("men").get();
+
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> docDataMen = [];
+
+    if (snapshotMen.docs.isNotEmpty) {
+      for (final QueryDocumentSnapshot<Map<String, dynamic>> document
+          in snapshotMen.docs) {
+        docDataMen.add(document);
+      }
+    } else {
+      print('No documents found.');
+    }
+
+    //women
+    final QuerySnapshot<Map<String, dynamic>> snapshotWomen =
+        await FirebaseFirestore.instance.collection("women").get();
+
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> docDataWomen = [];
+
+    if (snapshotWomen.docs.isNotEmpty) {
+      for (final QueryDocumentSnapshot<Map<String, dynamic>> document
+          in snapshotWomen.docs) {
+        docDataWomen.add(document);
+      }
+    } else {
+      print('No documents found.');
+    }
+
+    //kids
+    final QuerySnapshot<Map<String, dynamic>> snapshotKids =
+        await FirebaseFirestore.instance.collection("kids").get();
+
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> docDataKids = [];
+
+    if (snapshotKids.docs.isNotEmpty) {
+      for (final QueryDocumentSnapshot<Map<String, dynamic>> document
+          in snapshotKids.docs) {
+        docDataKids.add(document);
+      }
+    } else {
+      print('No documents found.');
+    }
+
+    //combine 3 list
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> docDataAll = [];
+    docDataAll.addAll(docDataMen);
+    docDataAll.addAll(docDataWomen);
+    docDataAll.addAll(docDataKids);
+
+    //sort high to low
+    docDataAll.sort((b, a) => a.data()['like'].compareTo(b.data()['like']));
+
+    return docDataAll;
   }
 
   //For Admin
