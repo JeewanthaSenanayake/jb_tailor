@@ -81,7 +81,12 @@ class _State extends State<OderDetailsPage> {
             children: <Widget>[
               Container(
                 alignment: Alignment.topCenter,
-                child: Image.network(link, height: scrnwidth * 0.75),
+                // child: Image.network(link, height: scrnwidth * 0.75),
+                child: FadeInImage(
+                  placeholder: const AssetImage('assets/loading/loading.jpg'),
+                  image: NetworkImage(link),
+                  height: scrnwidth * 0.75,
+                ),
               ),
               Container(
                 alignment: Alignment.centerRight,
@@ -357,7 +362,7 @@ class _State extends State<OderDetailsPage> {
                             data['price'].toString(),
                             link,
                             type);
-                            setState(() {
+                        setState(() {
                           _isLoading = false;
                         });
                         Navigator.of(context).push(MaterialPageRoute(

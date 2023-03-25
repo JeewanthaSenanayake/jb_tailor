@@ -1,30 +1,31 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:jb_tailor/Other_Pages/DatabaseManager/DatabaseManager.dart';
 import 'package:jb_tailor/Other_Pages/Oder.dart';
 
+import 'OnlinePayment/OnlinePayment.dart';
+
 class CustomOderStep2 extends StatefulWidget {
-  String uid, type;
+  String uid, customOderId;
   dynamic data;
-  File? imageFile;
-  CustomOderStep2(
-      {super.key,
-      required this.uid,
-      required this.type,
-      required this.data,
-      required this.imageFile});
+  CustomOderStep2({
+    super.key,
+    required this.uid,
+    required this.customOderId,
+    required this.data,
+  });
 
   @override
-  State<CustomOderStep2> createState() =>
-      _CustomOderStep2State(uid, type, data, imageFile!);
+  State<CustomOderStep2> createState() => _CustomOderStep2State(
+        uid,
+        customOderId,
+        data,
+      );
 }
 
 class _CustomOderStep2State extends State<CustomOderStep2> {
-  String uid, type;
+  String uid, customOderId;
   dynamic data;
-  File imageFile;
-  _CustomOderStep2State(this.uid, this.type, this.data, this.imageFile);
+  _CustomOderStep2State(this.uid, this.customOderId, this.data);
 
   List<TextFormField> TextForm = [];
   List<dynamic> inputData = [];
@@ -34,44 +35,11 @@ class _CustomOderStep2State extends State<CustomOderStep2> {
   @override
   void initState() {
     super.initState();
-    if (data['ClothType'] == "Skirt") {
-      inputDataName = [
-        "Waist",
-        "Hips",
-        "Waist to length",
-        "Crotch length",
-        "Inseam"
-      ];
-    } else if (data['ClothType'] == "Blouse") {
-      inputDataName = [
-        "Bust",
-        "Waist",
-        "Bust Apex",
-        "Shoulder",
-        "Neck to Waist - Front",
-        "Neck to Waist - Back",
-        "Arm/ Sleev Length",
-        "Shoulder to Elbow length"
-      ];
-    } else if (data['ClothType'] == "Frock") {
-      inputDataName = [
-        "Bust",
-        "Waist",
-        "Hips",
-        "Bust Apex",
-        "Shoulder",
-        "Neck to Waist - Front",
-        "Neck to Waist - Back",
-        "Waist to Length",
-        "Crotch Length",
-        "Arm/ Sleev Length",
-        "Height",
-        "Inseam",
-        "Shoulder to Elbow length",
-        "Neck"
-      ];
-    }
-    for (String name in inputDataName) {
+    inputDataFiled();
+  }
+
+  inputDataFiled() {
+    for (String name in data["Measurements"]) {
       TextForm.add(
         TextFormField(
           keyboardType: TextInputType.number,
@@ -107,26 +75,6 @@ class _CustomOderStep2State extends State<CustomOderStep2> {
         ),
       );
     }
-  }
-
-  //upload img to firebase storage
-  Future<String> uploadImage() async {
-    if (imageFile == null) {
-      return "fail";
-    }
-
-    final firebase_storage.Reference ref = firebase_storage
-        .FirebaseStorage.instance
-        .ref()
-        .child('customizedOderImage/$uid/$type')
-        .child(DateTime.now().toString() + '.jpg');
-
-    await ref.putFile(imageFile);
-    final url = await ref.getDownloadURL();
-
-    // Do something with the download URL (e.g. save to Firebase Firestore)
-    return url;
-    // print(url);
   }
 
   void showGuideImage(double scrnheight, double scrnwidth) {
@@ -185,9 +133,14 @@ class _CustomOderStep2State extends State<CustomOderStep2> {
                             fontSize: scrnheight * 0.02, color: Colors.yellow),
                       )),
                 ),
-                Image.file(
-                  imageFile,
-                  height: scrnwidth * 0.5,
+                // Image.network(
+                //   data["basicData"]["url"],
+                //   height: scrnwidth * 0.5,
+                // ),
+                FadeInImage(
+                  placeholder: const AssetImage('assets/loading/loading.jpg'),
+                  image: NetworkImage("${data["basicData"]["url"]}"),
+                  height: scrnheight * 0.15,
                 ),
                 Container(
                     padding: const EdgeInsets.only(top: 16.0),
@@ -228,15 +181,11 @@ class _CustomOderStep2State extends State<CustomOderStep2> {
                 setState(() {
                   _isLoading = true;
                 });
-                String URL = await uploadImage();
-                if (URL != "fail") {
-                  inputData.add({"url": URL});
-                  Map<String, String> dataMeasurements = {
-                    for (var inputData in inputData)
-                      inputData.keys.first: inputData.values.first
-                  };
-                  await DatabaseManager()
-                      .addCustomOder(uid, data, dataMeasurements);
+                if (await OnlinePayment().makePayment(
+                    (double.parse(data['price']) * 100).toInt().toString())) {
+                  await DatabaseManager().customOderPaymentSucsessful(
+                      data, inputData, customOderId, uid);
+
                   setState(() {
                     _isLoading = false;
                   });

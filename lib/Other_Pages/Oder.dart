@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jb_tailor/Other_Pages/OnlinePayment/OnlinePayment.dart';
 
 import 'Account.dart';
+import 'CustomOderStep2.dart';
 import 'DatabaseManager/DatabaseManager.dart';
 import 'Home_Screen.dart';
 import 'cart.dart';
@@ -35,21 +36,6 @@ class _OderState extends State<Oder> {
       oderDeatails = oder;
       loading = false;
 
-      if (oderDeatails['oderID'] == 0) {
-        OderArray.add(Container(
-          alignment: Alignment.center,
-          child: const Padding(
-            padding: EdgeInsets.all(30),
-            child: Text(
-              "No any pending oders",
-              style: TextStyle(color: Colors.grey, fontSize: 24),
-            ),
-          ),
-        ));
-      }
-
-      bool isOderHear = true;
-
       for (int i = 1; i <= oderDeatails['oderID']; i++) {
         if (oderDeatails['$i']['oderType'] == "custom" &&
             (oderDeatails['$i']['isPending'] == 2 ||
@@ -78,8 +64,15 @@ class _OderState extends State<Oder> {
                         SizedBox(
                           width: scrnheight * 0.1,
                           height: scrnheight * 0.1,
-                          child: Image.network(
-                            oderDeatails['$i']['dataMeasurements']['url'],
+                          // child: Image.network(
+                          //   oderDeatails['$i']['basicData']['url'],
+                          // ),
+                          child: FadeInImage(
+                            placeholder:
+                                const AssetImage('assets/loading/loading.jpg'),
+                            image: NetworkImage(
+                                "${oderDeatails['$i']['basicData']['url']}"),
+                            
                           ),
                         ),
                         // Text("Delete"),
@@ -101,23 +94,32 @@ class _OderState extends State<Oder> {
                                     oderDeatails['$i']['isPending'] == 1
                                 ? IconButton(
                                     onPressed: () async {
-                                      if (await OnlinePayment().makePayment(
-                                          (double.parse(oderDeatails['$i']
-                                                      ['price']) *
-                                                  100)
-                                              .toInt()
-                                              .toString())) {
-                                        await DatabaseManager()
-                                            .customOderPaymentSucsessful(
-                                                oderDeatails['$i'],
-                                                i.toString(),
-                                                uid);
-                                        Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                                builder: (context) => Oder(
+                                      // if (await OnlinePayment().makePayment(
+                                      //     (double.parse(oderDeatails['$i']
+                                      //                 ['price']) *
+                                      //             100)
+                                      //         .toInt()
+                                      //         .toString())) {
+                                      //   await DatabaseManager()
+                                      //       .customOderPaymentSucsessful(
+                                      //           oderDeatails['$i'],
+                                      //           i.toString(),
+                                      //           uid);
+                                      //   Navigator.of(context)
+                                      //       .push(MaterialPageRoute(
+                                      //           builder: (context) => Oder(
+                                      //                 uid: uid,
+                                      //               )));
+                                      // }
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  CustomOderStep2(
                                                       uid: uid,
-                                                    )));
-                                      }
+                                                      customOderId:
+                                                          i.toString(),
+                                                      data:
+                                                          oderDeatails['$i'])));
                                     },
                                     icon: const Icon(Icons.payment))
                                 : oderDeatails['$i']['isPending'] == 3
@@ -181,8 +183,15 @@ class _OderState extends State<Oder> {
                         SizedBox(
                           width: scrnheight * 0.1,
                           height: scrnheight * 0.1,
-                          child: Image.network(
-                            oderDeatails['$i']['link'],
+                          // child: Image.network(
+                          //   oderDeatails['$i']['link'],
+                          // ),
+                          child: FadeInImage(
+                            placeholder:
+                                const AssetImage('assets/loading/loading.jpg'),
+                            image:
+                                NetworkImage("${oderDeatails['$i']['link']}"),
+                            
                           ),
                         ),
                         // Text("Delete"),
@@ -224,19 +233,19 @@ class _OderState extends State<Oder> {
                   ],
                 )),
           );
-        } else if (isOderHear) {
-          isOderHear = false;
-          OderArray.add(Container(
-            alignment: Alignment.center,
-            child: const Padding(
-              padding: EdgeInsets.all(30),
-              child: Text(
-                "No any pending oders",
-                style: TextStyle(color: Colors.grey, fontSize: 24),
-              ),
-            ),
-          ));
         }
+      }
+      if (OderArray.isEmpty) {
+        OderArray.add(Container(
+          alignment: Alignment.center,
+          child: const Padding(
+            padding: EdgeInsets.all(30),
+            child: Text(
+              "No any pending oders",
+              style: TextStyle(color: Colors.grey, fontSize: 24),
+            ),
+          ),
+        ));
       }
     });
   }

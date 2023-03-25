@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'CustomOderStep2.dart';
 import 'DatabaseManager/DatabaseManager.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+
+import 'Oder.dart';
 
 class CustomOder extends StatefulWidget {
   String uid, type;
@@ -25,12 +28,11 @@ class _CustomOderState extends State<CustomOder> {
       TimeDuration = "",
       Note = "",
       ContactNumber = "",
-      imageValidator = "";
+      imageValidator = "",
+      SelectedType = "";
   int quantity = 1;
 
-  //for dropdown menu
-  List<DropdownMenuItem<String>> dropdownItems = [];
-  String? SelectedType = "";
+  String clothItems = "";
 
   @override
   void initState() {
@@ -39,30 +41,12 @@ class _CustomOderState extends State<CustomOder> {
     getUserDeatails();
 
     if (type == "Men") {
-      //create dropdown array
-      List<String> items = ["Shirt", "Trouser"];
-      for (String item in items) {
-        dropdownItems.add(
-          DropdownMenuItem(
-            value: item,
-            child: Text(item),
-          ),
-        );
-      }
-      SelectedType = items[0];
+      clothItems = "Shirt, Trouser ...";
     } else if (type == "Women") {
-      //create dropdown array
-      List<String> items = ["Skirt", "Blouse", "Frock"];
-      for (String item in items) {
-        dropdownItems.add(
-          DropdownMenuItem(
-            value: item,
-            child: Text(item),
-          ),
-        );
-      }
-      SelectedType = items[0];
-    } else if (type == "Kids") {}
+      clothItems = "Skirt, Blouse, Frock ...";
+    } else if (type == "Kids") {
+      clothItems = "Trouser, Short, Frock ...";
+    }
   }
 
   //get data
@@ -108,6 +92,27 @@ class _CustomOderState extends State<CustomOder> {
     }
   }
 
+  //upload img to firebase storage
+  Future<String> uploadImage() async {
+    if (_imageFile == null) {
+      return "fail";
+    }
+
+    final firebase_storage.Reference ref = firebase_storage
+        .FirebaseStorage.instance
+        .ref()
+        .child('customizedOderImage/$uid/$type')
+        .child(DateTime.now().toString() + '.jpg');
+
+    await ref.putFile(_imageFile!);
+    final url = await ref.getDownloadURL();
+
+    // Do something with the download URL (e.g. save to Firebase Firestore)
+    return url;
+    // print(url);
+  }
+
+  bool _isLoading = false;
   @override
   Widget build(BuildContext context) {
     double scrnwidth = MediaQuery.of(context).size.width;
@@ -132,26 +137,25 @@ class _CustomOderState extends State<CustomOder> {
                     key: _formkey1,
                     child: Column(
                       children: [
-                        Row(
-                          children: [
-                            Text(
-                              "Cloth type  \t\t",
-                              style: TextStyle(
-                                fontSize: scrnheight * 0.02,
-                                color: Colors.black,
-                              ),
+                        TextFormField(
+                          decoration: InputDecoration(
+                            // border: OutlineInputBorder(),
+                            labelText: 'Cloth type*',
+                            labelStyle: TextStyle(
+                              fontSize: scrnheight * 0.02,
+                              color: Colors.black,
                             ),
-                            //display dropdown menu
-                            DropdownButton(
-                              value: SelectedType,
-                              items: dropdownItems,
-                              onChanged: (value) {
-                                setState(() {
-                                  SelectedType = value;
-                                });
-                              },
-                            ),
-                          ],
+                            hintText: clothItems,
+                          ),
+                          validator: (text) {
+                            if (text.toString().isEmpty) {
+                              return 'Fabric type can not be empty';
+                            }
+                            return null;
+                          },
+                          onSaved: (text) {
+                            SelectedType = text.toString();
+                          },
                         ),
                         TextFormField(
                           decoration: InputDecoration(
@@ -355,7 +359,7 @@ class _CustomOderState extends State<CustomOder> {
                                   },
                                   child: Image.file(
                                     _imageFile!,
-                                    width: scrnwidth * 0.5,
+                                    width: scrnwidth * 0.43,
                                   ))
                               : Container(
                                   child: GestureDetector(
@@ -364,22 +368,30 @@ class _CustomOderState extends State<CustomOder> {
                                     },
                                     child: Image.asset(
                                       "assets/home/lodeImg.jpg",
-                                      width: scrnwidth * 0.5,
+                                      width: scrnwidth * 0.43,
                                       // width: 70,
                                     ),
                                   ),
                                 ),
                         ),
                         Container(
-                          alignment: Alignment.bottomRight,
-                          child: TextButton(
-                            child: Text(
-                              'Next',
-                              style: TextStyle(
-                                  fontSize: scrnheight * 0.025,
-                                  color: Colors.orange,
-                                  fontWeight: FontWeight.bold),
-                            ),
+                          alignment: Alignment.bottomCenter,
+                          child: ElevatedButton(
+                            child: _isLoading
+                                ? const SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 3,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : Text(
+                                    'Submit step 1',
+                                    style: TextStyle(
+                                        fontSize: scrnheight * 0.025,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                             onPressed: () async {
                               _formkey1.currentState!.save();
                               if (_imageFile == null) {
@@ -390,24 +402,35 @@ class _CustomOderState extends State<CustomOder> {
                               }
                               if (_formkey1.currentState!.validate() &&
                                   _imageFile != null) {
-                                dynamic data = {
-                                  "ClothType": SelectedType,
-                                  "FabricType": FabricType,
-                                  "Colour": Colour,
-                                  "address": address,
-                                  "TimeDuration": TimeDuration,
-                                  "Note": Note,
-                                  "ContactNumber": ContactNumber,
-                                  "quantity": quantity
-                                };
+                                setState(() {
+                                  _isLoading = true;
+                                });
+                                String URL = await uploadImage();
+                                if (URL != "fail") {
+                                  dynamic data = {
+                                    "ClothType": SelectedType,
+                                    "FabricType": FabricType,
+                                    "Colour": Colour,
+                                    "address": address,
+                                    "TimeDuration": TimeDuration,
+                                    "Note": Note,
+                                    "ContactNumber": ContactNumber,
+                                    "quantity": quantity,
+                                    "url": URL
+                                  };
 
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => CustomOderStep2(
-                                          uid: uid,
-                                          type: type,
-                                          data: data,
-                                          imageFile: _imageFile,
-                                        )));
+                                  await DatabaseManager()
+                                      .addCustomOderStep1(uid, data);
+
+                                  setState(() {
+                                    _isLoading = false;
+                                  });
+
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => Oder(
+                                            uid: uid,
+                                          )));
+                                }
                               }
                             },
                           ),

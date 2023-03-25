@@ -125,7 +125,35 @@ class DatabaseManager {
   }
 
   //Add custom oders
-  Future<dynamic> addCustomOder(
+  Future<dynamic> addCustomOderStep1(String uid, dynamic basicData) async {
+    final customOderList =
+        FirebaseFirestore.instance.collection("Oder").doc(uid);
+    dynamic itemId;
+    try {
+      await customOderList.get().then((QuerySnapshot) {
+        itemId = QuerySnapshot.data();
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+
+    dynamic newItemId = itemId["oderID"] + 1;
+    dynamic data = {
+      "oderType": "custom",
+      "isPending": 1,
+      'price': "Pending",
+      'status': "not yet pay",
+      "basicData": basicData,
+    };
+
+    dynamic oder = {
+      "oderID": newItemId,
+      newItemId.toString(): data,
+    };
+    return await customOderList.update(oder);
+  }
+
+  Future<dynamic> addCustomOderStep2(
       String uid, dynamic basicData, dynamic dataMeasurements) async {
     final customOderList =
         FirebaseFirestore.instance.collection("Oder").doc(uid);
@@ -221,12 +249,13 @@ class DatabaseManager {
 
   //custom oder payment sucsessful
   Future<dynamic> customOderPaymentSucsessful(
-      dynamic cartData, String oderID, String uid) async {
+      dynamic cartData, dynamic meshData, String oderID, String uid) async {
     final customOderList =
         FirebaseFirestore.instance.collection("Oder").doc(uid);
 
     cartData["isPending"] = 2;
     cartData["status"] = "Working with your oder";
+    cartData["dataMeasurements"] = meshData;
     dynamic oder = {
       oderID: cartData,
     };

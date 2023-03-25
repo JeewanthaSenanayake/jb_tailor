@@ -54,8 +54,9 @@ class _State extends State<HomePage> {
                         imgId: itemData['imgId'],
                         type: itemData['type'])));
               },
-              child: Image.network(
-                "${itemData['url']}",
+              child: FadeInImage(
+                placeholder: const AssetImage('assets/loading/loading.jpg'),
+                image: NetworkImage("${itemData['url']}"),
                 height: scrnheight * 0.15,
               ),
             ),

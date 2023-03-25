@@ -46,8 +46,13 @@ class _NormalOderState extends State<NormalOder> {
                         imgId: itemData['imgId'],
                         type: type)));
               },
-              child: Image.network(
-                "${itemData['url']}",
+              // child: Image.network(
+              //   "${itemData['url']}",
+              //   height: scrnwidth * 0.45,
+              // ),
+              child: FadeInImage(
+                placeholder: const AssetImage('assets/loading/loading.jpg'),
+                image: NetworkImage("${itemData['url']}"),
                 height: scrnwidth * 0.45,
               ),
             ),

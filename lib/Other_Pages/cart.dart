@@ -31,25 +31,9 @@ class _cartState extends State<cart> {
   getCart() async {
     dynamic oder = await DatabaseManager().getFromCart(uid);
     setState(() {
+      cartItems = [];
       oderDeatails = oder;
       loading = false;
-
-      if (oderDeatails['oderID'] == 0) {
-        cartItems.add(GestureDetector(
-          onTap: (() {}),
-          child: Container(
-            alignment: Alignment.center,
-            child: const Padding(
-              padding: EdgeInsets.all(30),
-              child: Text(
-                "No any thing in cart",
-                style: TextStyle(color: Colors.grey, fontSize: 24),
-              ),
-            ),
-          ),
-        ));
-      }
-      bool isOderHear = true;
 
       for (int index = 0; index < oderDeatails['oderID']; index++) {
         if (oderDeatails['${index + 1}']['isPending'] == 1) {
@@ -87,8 +71,14 @@ class _cartState extends State<cart> {
                           SizedBox(
                             width: scrnheight * 0.1,
                             height: scrnheight * 0.1,
-                            child: Image.network(
-                              oderDeatails['${index + 1}']['link'],
+                            // child: Image.network(
+                            //   oderDeatails['${index + 1}']['link'],
+                            // ),
+                            child: FadeInImage(
+                              placeholder: const AssetImage(
+                                  'assets/loading/loading.jpg'),
+                              image: NetworkImage(
+                                  "${oderDeatails['${index + 1}']['link']}"),
                             ),
                           ),
                           // Text("Delete"),
@@ -135,22 +125,22 @@ class _cartState extends State<cart> {
                   ))
               //
               ));
-        } else if (isOderHear) {
-          isOderHear = false;
-          cartItems.add(GestureDetector(
-            onTap: (() {}),
-            child: Container(
-              alignment: Alignment.center,
-              child: const Padding(
-                padding: EdgeInsets.all(30),
-                child: Text(
-                  "No any thing in cart",
-                  style: TextStyle(color: Colors.grey, fontSize: 24),
-                ),
+        }
+      }
+      if (cartItems.isEmpty) {
+        cartItems.add(GestureDetector(
+          onTap: (() {}),
+          child: Container(
+            alignment: Alignment.center,
+            child: const Padding(
+              padding: EdgeInsets.all(30),
+              child: Text(
+                "No any thing in cart",
+                style: TextStyle(color: Colors.grey, fontSize: 24),
               ),
             ),
-          ));
-        }
+          ),
+        ));
       }
     });
   }
@@ -174,7 +164,6 @@ class _cartState extends State<cart> {
     });
   }
 
-  bool isOderHear = true;
   @override
   Widget build(BuildContext context) {
     setState(() {
