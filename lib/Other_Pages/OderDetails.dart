@@ -327,20 +327,20 @@ class _State extends State<OderDetailsPage> {
                         style: TextStyle(color: Colors.grey),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.add),
+                        icon: const Icon(Icons.remove),
                         color: Colors.black,
                         onPressed: () {
-                          incresequantity();
+                          decreasequanitity();
                         },
                       ),
                       Text(
                         "$quantity",
                       ),
                       IconButton(
-                        icon: const Icon(Icons.remove),
+                        icon: const Icon(Icons.add),
                         color: Colors.black,
                         onPressed: () {
-                          decreasequanitity();
+                          incresequantity();
                         },
                       ),
                     ]),

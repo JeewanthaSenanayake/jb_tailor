@@ -384,7 +384,7 @@ class _OderState extends State<Oder> {
       context: context,
       builder: (BuildContext context) {
         return SimpleDialog(
-          title: const Text("Did you resived this order?"),
+          title: const Text("Did you received this order?"),
           children: <Widget>[
             Container(
               padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),

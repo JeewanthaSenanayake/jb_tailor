@@ -174,12 +174,8 @@ class _ChechoutState extends State<Chechout> {
                       margin: const EdgeInsets.only(
                           left: 0, right: 0, top: 10, bottom: 10),
                     ),
-                    Text(
-                      "\nPayemnt option\n",
-                      style: TextStyle(
-                        fontSize: scrnheight * 0.02,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    SizedBox(
+                      height: scrnheight*0.03,
                     ),
                     Align(
                       alignment: Alignment.center,
@@ -219,7 +215,7 @@ class _ChechoutState extends State<Chechout> {
                                     ),
                                   )
                                 : Text(
-                                    'Place oder',
+                                    'Place order',
                                     style:
                                         TextStyle(fontSize: scrnheight * 0.02),
                                   ),
