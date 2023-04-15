@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jb_tailor/Other_Pages/DatabaseManager/DatabaseManager.dart';
 import 'package:jb_tailor/Other_Pages/Oder.dart';
-
-import 'OnlinePayment/OnlinePayment.dart';
+import 'package:jb_tailor/Other_Pages/OnlinePayment/OnlinePayment.dart';
 
 class CustomOderStep2 extends StatefulWidget {
   String uid, customOderId;
@@ -145,8 +144,10 @@ class _CustomOderStep2State extends State<CustomOderStep2> {
                 Container(
                     padding: const EdgeInsets.only(top: 16.0),
                     alignment: Alignment.bottomLeft,
-                    child:
-                        const Text("Please input all measurements are in cm"))
+                    child: const Text(
+                      "Please input all measurements are in cm",
+                      style: TextStyle(color: Colors.red),
+                    ))
               ],
             ),
           ),
@@ -181,8 +182,8 @@ class _CustomOderStep2State extends State<CustomOderStep2> {
                 setState(() {
                   _isLoading = true;
                 });
-                if (await OnlinePayment().makePayment(
-                    (double.parse(data['price']) * 100).toInt().toString())) {
+                int ammount = (double.parse(data['price']) * 100).toInt();
+                if (await OnlinePayment().makePayment(ammount.toString())) {
                   await DatabaseManager().customOderPaymentSucsessful(
                       data, inputData, customOderId, uid);
 

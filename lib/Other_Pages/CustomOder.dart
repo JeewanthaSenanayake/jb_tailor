@@ -387,7 +387,7 @@ class _CustomOderState extends State<CustomOder> {
                                     ),
                                   )
                                 : Text(
-                                    'Submit step 1',
+                                    'Submit Order',
                                     style: TextStyle(
                                         fontSize: scrnheight * 0.025,
                                         fontWeight: FontWeight.bold),

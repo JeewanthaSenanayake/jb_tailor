@@ -141,6 +141,7 @@ class DatabaseManager {
     dynamic data = {
       "oderType": "custom",
       "isPending": 1,
+      "date": DateTime.now(),
       'price': "Pending",
       'status': "not yet pay",
       "basicData": basicData,
@@ -208,6 +209,27 @@ class DatabaseManager {
     return await cartList.update(oder);
   }
 
+  //delete item from oder
+  Future<dynamic> deleteItemFromoder(
+      String uid, int oderId, dynamic data) async {
+    final cartList = FirebaseFirestore.instance.collection("Oder").doc(uid);
+    data["isPending"] = 0;
+    dynamic oder = {
+      oderId.toString(): data,
+    };
+    return await cartList.update(oder);
+  }
+
+  //reject item from cart
+  Future<dynamic> RejectedOder(String uid, int oderId, dynamic data) async {
+    final cartList = FirebaseFirestore.instance.collection("Oder").doc(uid);
+    data["isPending"] = 6;
+    dynamic oder = {
+      oderId.toString(): data,
+    };
+    return await cartList.update(oder);
+  }
+
   //get data from oder
   Future<dynamic> getFromOder(String uid) async {
     final cartList = FirebaseFirestore.instance.collection("Oder").doc(uid);
@@ -240,6 +262,7 @@ class DatabaseManager {
 
     cartData["isPending"] = 2;
     cartData["status"] = "Rapping your oder";
+    cartData["date"] = DateTime.now();
     dynamic oder = {
       "oderID": newItemId,
       newItemId.toString(): cartData,
@@ -254,6 +277,7 @@ class DatabaseManager {
         FirebaseFirestore.instance.collection("Oder").doc(uid);
 
     cartData["isPending"] = 2;
+    cartData["date"] = DateTime.now();
     cartData["status"] = "Working with your oder";
     cartData["dataMeasurements"] = meshData;
     dynamic oder = {

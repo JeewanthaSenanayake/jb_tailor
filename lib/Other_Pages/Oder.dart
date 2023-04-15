@@ -30,6 +30,52 @@ class _OderState extends State<Oder> {
     getOder();
   }
 
+  void RejectedDialogBox(dynamic oder, int oderId, String uid) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: const Text("Rjected remark"),
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+              child: Column(
+                children: [
+                  Text(oder["remark"]),
+                  Row(
+                    children: [
+                      Container(
+                        alignment: Alignment.topLeft,
+                        child: TextButton(
+                          child: const Text("Remove item"),
+                          onPressed: () async {
+                            await DatabaseManager()
+                                .RejectedOder(uid, oderId, oder);
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => Oder(uid: uid)));
+                          },
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.topRight,
+                        child: TextButton(
+                          child: const Text("Cancel"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   getOder() async {
     dynamic oder = await DatabaseManager().getFromOder(uid);
     setState(() {
@@ -72,7 +118,6 @@ class _OderState extends State<Oder> {
                                 const AssetImage('assets/loading/loading.jpg'),
                             image: NetworkImage(
                                 "${oderDeatails['$i']['basicData']['url']}"),
-                            
                           ),
                         ),
                         // Text("Delete"),
@@ -94,23 +139,6 @@ class _OderState extends State<Oder> {
                                     oderDeatails['$i']['isPending'] == 1
                                 ? IconButton(
                                     onPressed: () async {
-                                      // if (await OnlinePayment().makePayment(
-                                      //     (double.parse(oderDeatails['$i']
-                                      //                 ['price']) *
-                                      //             100)
-                                      //         .toInt()
-                                      //         .toString())) {
-                                      //   await DatabaseManager()
-                                      //       .customOderPaymentSucsessful(
-                                      //           oderDeatails['$i'],
-                                      //           i.toString(),
-                                      //           uid);
-                                      //   Navigator.of(context)
-                                      //       .push(MaterialPageRoute(
-                                      //           builder: (context) => Oder(
-                                      //                 uid: uid,
-                                      //               )));
-                                      // }
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
                                               builder: (context) =>
@@ -129,7 +157,19 @@ class _OderState extends State<Oder> {
                                               i.toString(), uid);
                                         },
                                         icon: const Icon(Icons.check_circle))
-                                    : Container(),
+                                    : oderDeatails['$i']['isPending'] == 1
+                                        ? IconButton(
+                                            onPressed: () async {
+                                              await DatabaseManager()
+                                                  .deleteItemFromoder(uid, i,
+                                                      oderDeatails['$i']);
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          Oder(uid: uid)));
+                                            },
+                                            icon: const Icon(Icons.delete))
+                                        : Container(),
                           ],
                         ),
                         Text(
@@ -191,7 +231,6 @@ class _OderState extends State<Oder> {
                                 const AssetImage('assets/loading/loading.jpg'),
                             image:
                                 NetworkImage("${oderDeatails['$i']['link']}"),
-                            
                           ),
                         ),
                         // Text("Delete"),
@@ -233,6 +272,77 @@ class _OderState extends State<Oder> {
                   ],
                 )),
           );
+        } else if (oderDeatails['$i']['oderType'] == "custom" &&
+            oderDeatails['$i']['isPending'] == 5) {
+          OderArray.add(
+            Container(
+                // width: double.infinity,
+                height: scrnheight * 0.125,
+                margin: EdgeInsets.all(scrnheight * 0.01),
+                padding: EdgeInsets.all(scrnheight * 0.01),
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 189, 188, 188),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromARGB(120, 0, 0, 0),
+                      offset: Offset(0, 1),
+                      blurRadius: 10,
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Column(
+                      children: [
+                        SizedBox(
+                          width: scrnheight * 0.1,
+                          height: scrnheight * 0.1,
+                          // child: Image.network(
+                          //   oderDeatails['$i']['basicData']['url'],
+                          // ),
+                          child: FadeInImage(
+                            placeholder:
+                                const AssetImage('assets/loading/loading.jpg'),
+                            image: NetworkImage(
+                                "${oderDeatails['$i']['basicData']['url']}"),
+                          ),
+                        ),
+                        // Text("Delete"),
+                      ],
+                    ),
+                    SizedBox(width: scrnwidth * 0.015),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: scrnwidth * 0.585,
+                              child: Text(
+                                  oderDeatails['$i']['basicData']['ClothType']),
+                            ),
+                            IconButton(
+                                onPressed: () async {
+                                  RejectedDialogBox(oderDeatails['$i'], i, uid);
+                                },
+                                icon: const Icon(Icons.quiz_rounded))
+                          ],
+                        ),
+                        Text(
+                            "Quantity: ${oderDeatails['$i']['basicData']['quantity']}"),
+                        Text(
+                          "${oderDeatails['$i']['status']}",
+                          style: const TextStyle(
+                            color: Colors.deepOrange,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                )),
+          );
         }
       }
       if (OderArray.isEmpty) {
@@ -241,7 +351,7 @@ class _OderState extends State<Oder> {
           child: const Padding(
             padding: EdgeInsets.all(30),
             child: Text(
-              "No any pending oders",
+              "No any pending orders",
               style: TextStyle(color: Colors.grey, fontSize: 24),
             ),
           ),
@@ -274,7 +384,7 @@ class _OderState extends State<Oder> {
       context: context,
       builder: (BuildContext context) {
         return SimpleDialog(
-          title: const Text("Did you resived this oder?"),
+          title: const Text("Did you resived this order?"),
           children: <Widget>[
             Container(
               padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
@@ -321,7 +431,7 @@ class _OderState extends State<Oder> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Oders"),
+        title: const Text("Order"),
       ),
       body: SingleChildScrollView(
           child: loading
@@ -343,7 +453,7 @@ class _OderState extends State<Oder> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list_alt),
-            label: 'Oders',
+            label: 'Order',
             backgroundColor: Color.fromARGB(255, 128, 128, 128),
           ),
           BottomNavigationBarItem(
