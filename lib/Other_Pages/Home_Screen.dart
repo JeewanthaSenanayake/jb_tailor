@@ -120,7 +120,7 @@ class _State extends State<HomePage> {
       context: context,
       builder: (BuildContext context) {
         return SimpleDialog(
-          title: const Text('Select customer type'),
+          title: const Text('Select order type'),
           children: <Widget>[
             Container(
               padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),

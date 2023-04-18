@@ -37,7 +37,9 @@ class _CustomOderStep2State extends State<CustomOderStep2> {
     inputDataFiled();
   }
 
-  inputDataFiled() {
+  dynamic adminData;
+  inputDataFiled() async {
+    dynamic adminDataSet = await DatabaseManager().adminTelNo();
     for (String name in data["Measurements"]) {
       TextForm.add(
         TextFormField(
@@ -74,6 +76,9 @@ class _CustomOderStep2State extends State<CustomOderStep2> {
         ),
       );
     }
+    setState(() {
+      adminData = adminDataSet;
+    });
   }
 
   void showGuideImage(double scrnheight, double scrnwidth) {
@@ -159,6 +164,21 @@ class _CustomOderStep2State extends State<CustomOderStep2> {
                   children: TextForm,
                 )),
           ),
+          Container(
+            margin: const EdgeInsets.all(10.0),
+            alignment: Alignment.topLeft,
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Price : ${double.parse(data['price'])}"),
+                  Text("Delivery : ${adminData['deliveryFee']}"),
+                  Text(
+                    "Total : ${double.parse(data['price']) + adminData['deliveryFee']}",
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ]),
+          ),
           ElevatedButton(
             child: _isLoading
                 ? const SizedBox(
@@ -182,7 +202,10 @@ class _CustomOderStep2State extends State<CustomOderStep2> {
                 setState(() {
                   _isLoading = true;
                 });
-                int ammount = (double.parse(data['price']) * 100).toInt();
+                int ammount =
+                    ((double.parse(data['price']) + adminData['deliveryFee']) *
+                            100)
+                        .toInt();
                 if (await OnlinePayment().makePayment(ammount.toString())) {
                   await DatabaseManager().customOderPaymentSucsessful(
                       data, inputData, customOderId, uid);

@@ -106,6 +106,7 @@ class DatabaseManager {
     dynamic newItemId = itemId["oderID"] + 1;
     dynamic data = {
       "oderType": "normal",
+      "category": type.toLowerCase(),
       'oderId': "$type/$oderID.jpg",
       'oderName': oderName,
       'colour': colour,
@@ -125,7 +126,8 @@ class DatabaseManager {
   }
 
   //Add custom oders
-  Future<dynamic> addCustomOderStep1(String uid, dynamic basicData) async {
+  Future<dynamic> addCustomOderStep1(
+      String uid, dynamic basicData, String category) async {
     final customOderList =
         FirebaseFirestore.instance.collection("Oder").doc(uid);
     dynamic itemId;
@@ -140,6 +142,7 @@ class DatabaseManager {
     dynamic newItemId = itemId["oderID"] + 1;
     dynamic data = {
       "oderType": "custom",
+      "category": category.toLowerCase(),
       "isPending": 1,
       "date": DateTime.now(),
       'price': "Pending",
@@ -261,7 +264,7 @@ class DatabaseManager {
     dynamic newItemId = itemId["oderID"] + 1;
 
     cartData["isPending"] = 2;
-    cartData["status"] = "Rapping your oder";
+    cartData["status"] = "Wrapping up order";
     cartData["date"] = DateTime.now();
     dynamic oder = {
       "oderID": newItemId,

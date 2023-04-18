@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'CustomOderStep2.dart';
 import 'DatabaseManager/DatabaseManager.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -149,7 +148,7 @@ class _CustomOderState extends State<CustomOder> {
                           ),
                           validator: (text) {
                             if (text.toString().isEmpty) {
-                              return 'Fabric type can not be empty';
+                              return 'Cloth type can not be empty';
                             }
                             return null;
                           },
@@ -165,7 +164,7 @@ class _CustomOderState extends State<CustomOder> {
                               fontSize: scrnheight * 0.02,
                               color: Colors.black,
                             ),
-                            // hintText: ClothTypeDiscrip,
+                            hintText: "Viscose, Cotton, Mazza...",
                           ),
                           validator: (text) {
                             if (text.toString().isEmpty) {
@@ -420,7 +419,7 @@ class _CustomOderState extends State<CustomOder> {
                                   };
 
                                   await DatabaseManager()
-                                      .addCustomOderStep1(uid, data);
+                                      .addCustomOderStep1(uid, data,type);
 
                                   setState(() {
                                     _isLoading = false;

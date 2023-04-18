@@ -135,7 +135,7 @@ class _cartState extends State<cart> {
             child: const Padding(
               padding: EdgeInsets.all(30),
               child: Text(
-                "No any thing in cart",
+                "Cart is empty",
                 style: TextStyle(color: Colors.grey, fontSize: 24),
               ),
             ),
