@@ -94,7 +94,7 @@ class _OderState extends State<Oder> {
                 margin: EdgeInsets.all(scrnheight * 0.01),
                 padding: EdgeInsets.all(scrnheight * 0.01),
                 decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 189, 188, 188),
+                  color: Color.fromARGB(255, 219, 217, 217),
                   boxShadow: [
                     BoxShadow(
                       color: Color.fromARGB(120, 0, 0, 0),
@@ -207,7 +207,7 @@ class _OderState extends State<Oder> {
                 margin: EdgeInsets.all(scrnheight * 0.01),
                 padding: EdgeInsets.all(scrnheight * 0.01),
                 decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 189, 188, 188),
+                  color: Color.fromARGB(255, 219, 217, 217),
                   boxShadow: [
                     BoxShadow(
                       color: Color.fromARGB(120, 0, 0, 0),
@@ -281,7 +281,7 @@ class _OderState extends State<Oder> {
                 margin: EdgeInsets.all(scrnheight * 0.01),
                 padding: EdgeInsets.all(scrnheight * 0.01),
                 decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 189, 188, 188),
+                  color: Color.fromARGB(255, 219, 217, 217),
                   boxShadow: [
                     BoxShadow(
                       color: Color.fromARGB(120, 0, 0, 0),
@@ -431,7 +431,7 @@ class _OderState extends State<Oder> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Order"),
+        title: const Text("Orders"),
       ),
       body: SingleChildScrollView(
           child: loading

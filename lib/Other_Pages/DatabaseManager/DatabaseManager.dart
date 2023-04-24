@@ -281,7 +281,7 @@ class DatabaseManager {
 
     cartData["isPending"] = 2;
     cartData["date"] = DateTime.now();
-    cartData["status"] = "Working with your oder";
+    cartData["status"] = "Working with your order";
     cartData["dataMeasurements"] = meshData;
     dynamic oder = {
       oderID: cartData,
@@ -391,7 +391,7 @@ class DatabaseManager {
       await adminInfo.get().then((QuerySnapshot) {
         AdminDatils = QuerySnapshot.data();
       });
-
+      
       return AdminDatils;
     } catch (e) {
       print(e.toString());

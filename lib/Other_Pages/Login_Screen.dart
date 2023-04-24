@@ -84,7 +84,7 @@ class _State extends State<LoginPage> {
                             }
 
                             if (UsernamePassword) {
-                              return 'Email & Password are doesnot match';
+                              return 'Invalid Username or Password';
                             }
 
                             return null;
@@ -113,7 +113,7 @@ class _State extends State<LoginPage> {
                             }
 
                             if (UsernamePassword) {
-                              return 'Email & Password are doesnot match';
+                              return 'Invalid Username or Password';
                             }
 
                             return null;

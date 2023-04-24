@@ -72,7 +72,7 @@ class _State extends State<OderDetailsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Order Details"),
+        title: const Text("Product Details"),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -347,45 +347,52 @@ class _State extends State<OderDetailsPage> {
                     SizedBox(
                       height: scrnheight * 0.04,
                     ),
-                    ElevatedButton.icon(
-                      onPressed: () async {
-                        setState(() {
-                          _isLoading = true;
-                        });
-                        await DatabaseManager().addToCart(
-                            uid,
-                            imgId,
-                            data['name'],
-                            selectedColour!,
-                            selectedSize!,
-                            quantity,
-                            data['price'].toString(),
-                            link,
-                            type);
-                        setState(() {
-                          _isLoading = false;
-                        });
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => cart(uid: uid)));
-                      },
-                      label: _isLoading
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 3,
-                                color: Colors.white,
-                              ),
-                            )
-                          : Text(
-                              'Add cart',
-                              style: TextStyle(fontSize: scrnheight * 0.02),
-                            ),
-                      icon: Icon(
-                        Icons.shopping_cart,
-                        size: scrnheight * 0.05,
+                    Center(
+                      child: SizedBox(
+                        width: scrnwidth * 0.5,
+                        height: scrnheight * 0.05,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            setState(() {
+                              _isLoading = true;
+                            });
+                            await DatabaseManager().addToCart(
+                                uid,
+                                imgId,
+                                data['name'],
+                                selectedColour!,
+                                selectedSize!,
+                                quantity,
+                                data['price'].toString(),
+                                link,
+                                type);
+                            setState(() {
+                              _isLoading = false;
+                            });
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => cart(uid: uid)));
+                          },
+                          child: _isLoading
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 3,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : Text(
+                                  'Add to cart',
+                                  style:
+                                      TextStyle(fontSize: scrnheight * 0.025),
+                                ),
+                          // icon: Icon(
+                          //   Icons.shopping_cart,
+                          //   size: scrnheight * 0.05,
+                          // ),
+                          // <-- Text
+                        ),
                       ),
-                      // <-- Text
                     ),
                   ],
                 ),

@@ -175,55 +175,60 @@ class _ChechoutState extends State<Chechout> {
                           left: 0, right: 0, top: 10, bottom: 10),
                     ),
                     SizedBox(
-                      height: scrnheight*0.03,
+                      height: scrnheight * 0.03,
                     ),
                     Align(
                       alignment: Alignment.center,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          ElevatedButton.icon(
-                            onPressed: () async {
-                              int amount = ((adminData['deliveryFee'] +
-                                          cartData['quantity'] *
-                                              double.parse(cartData['price'])) *
-                                      100)
-                                  .toInt();
-                              setState(() {
-                                _isLoading = true;
-                              });
-                              if (await OnlinePayment()
-                                  .makePayment(amount.toString())) {
-                                await DatabaseManager()
-                                    .cartToOder(cartData, oderID, uid);
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => Oder(
-                                          uid: uid,
-                                        )));
-                              }
-                              setState(() {
-                                _isLoading = false;
-                              });
-                            },
-                            label: _isLoading
-                                ? const SizedBox(
-                                    width: 20,
-                                    height: 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 3,
-                                      color: Colors.white,
+                          SizedBox(
+                            width: scrnwidth * 0.5,
+                            height: scrnheight * 0.05,
+                            child: ElevatedButton.icon(
+                              onPressed: () async {
+                                int amount = ((adminData['deliveryFee'] +
+                                            cartData['quantity'] *
+                                                double.parse(
+                                                    cartData['price'])) *
+                                        100)
+                                    .toInt();
+                                setState(() {
+                                  _isLoading = true;
+                                });
+                                if (await OnlinePayment()
+                                    .makePayment(amount.toString())) {
+                                  await DatabaseManager()
+                                      .cartToOder(cartData, oderID, uid);
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => Oder(
+                                            uid: uid,
+                                          )));
+                                }
+                                setState(() {
+                                  _isLoading = false;
+                                });
+                              },
+                              label: _isLoading
+                                  ? const SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 3,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : Text(
+                                      'Place order',
+                                      style: TextStyle(
+                                          fontSize: scrnheight * 0.025),
                                     ),
-                                  )
-                                : Text(
-                                    'Place order',
-                                    style:
-                                        TextStyle(fontSize: scrnheight * 0.02),
-                                  ),
-                            icon: Icon(
-                              Icons.payment,
-                              size: scrnheight * 0.03,
+                              icon: Icon(
+                                Icons.payment,
+                                size: scrnheight * 0.03,
+                              ),
+                              // <-- Text
                             ),
-                            // <-- Text
                           ),
                         ],
                       ),

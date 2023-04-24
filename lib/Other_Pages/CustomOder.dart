@@ -185,7 +185,7 @@ class _CustomOderState extends State<CustomOder> {
                               color: Colors.black,
                             ),
                             hintText:
-                                'Please explain each part colour in deatail',
+                                'Please explain colour of each part in detail',
                           ),
                           validator: (text) {
                             if (text.toString().isEmpty) {
@@ -306,10 +306,10 @@ class _CustomOderState extends State<CustomOder> {
                               return 'Contact Number can not be empty';
                             }
                             if (!RegExp(r'^[+0-9]+$').hasMatch(text!)) {
-                              return 'Contact Number can only contain the characters "+0123456789"';
+                              return 'Contact Number can only contain "+0123456789" characters ';
                             }
                             if (text.length != 10 && text.length != 12) {
-                              return 'Invalide phone number';
+                              return 'Invalid mobile number';
                             }
                             return null;
                           },
@@ -396,7 +396,7 @@ class _CustomOderState extends State<CustomOder> {
                               if (_imageFile == null) {
                                 setState(() {
                                   imageValidator =
-                                      "Plese select a image from your galary";
+                                      "Please select an image from your gallery";
                                 });
                               }
                               if (_formkey1.currentState!.validate() &&
@@ -419,7 +419,7 @@ class _CustomOderState extends State<CustomOder> {
                                   };
 
                                   await DatabaseManager()
-                                      .addCustomOderStep1(uid, data,type);
+                                      .addCustomOderStep1(uid, data, type);
 
                                   setState(() {
                                     _isLoading = false;
