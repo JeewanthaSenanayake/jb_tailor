@@ -151,7 +151,7 @@ class _State extends State<LoginPage> {
                           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              primary: Color.fromARGB(
+                              primary: const Color.fromARGB(
                                   255, 42, 188, 171), // background
                               // onPrimary: Colors.white, // foreground
                             ),
@@ -193,19 +193,19 @@ class _State extends State<LoginPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               // Gesture detector for facebook Login
-                              GestureDetector(
-                                onTap: () {
-                                  // Call facebook login methon
-                                  // AuthService().signInWithFacebook();
-                                  print("facebook");
-                                },
-                                child: Image.asset(
-                                  "assets/icons/facebook.png",
-                                  height: 55,
-                                  width: 55,
-                                ),
-                              ),
-                              SizedBox(width: 50),
+                              // GestureDetector(
+                              //   onTap: () {
+                              //     // Call facebook login methon
+                              //     // AuthService().signInWithFacebook();
+                              //     print("facebook");
+                              //   },
+                              //   child: Image.asset(
+                              //     "assets/icons/facebook.png",
+                              //     height: 55,
+                              //     width: 55,
+                              //   ),
+                              // ),
+                              // SizedBox(width: 50),
                               // Gesture detector for the Google icon
                               GestureDetector(
                                 onTap: () {
@@ -232,7 +232,7 @@ class _State extends State<LoginPage> {
                           child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text('Does not have account?'),
+                          const Text('Does not have account?'),
                           TextButton(
                             style: TextButton.styleFrom(
                               foregroundColor: Color.fromARGB(255, 0, 0, 255),

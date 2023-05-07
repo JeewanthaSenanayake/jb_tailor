@@ -64,6 +64,7 @@ class _cartState extends State<cart> {
                       ),
                     ],
                   ),
+
                   child: Row(
                     children: [
                       Column(
@@ -85,6 +86,7 @@ class _cartState extends State<cart> {
                         ],
                       ),
                       SizedBox(width: scrnwidth * 0.015),
+                      
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,

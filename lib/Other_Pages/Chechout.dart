@@ -110,8 +110,11 @@ class _ChechoutState extends State<Chechout> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(cartData['oderName']),
-                        Text(cartData['price'])
+                        Container(
+                            width: scrnwidth * 0.75,
+                            child: Text(cartData['oderName'])),
+                        const Spacer(),
+                        Container(child: Text(cartData['price']))
                       ],
                     ),
                     Row(
