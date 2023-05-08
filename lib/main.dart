@@ -25,3 +25,11 @@ class MyApp extends StatelessWidget {
         home: LoginPage());
   }
 }
+
+// Is pending
+// 0-delete 
+// 1-in customized order customer placed order, tailor may or may not be accepted (tailor accepted can be identified using the price tag) / readymade order in the cart
+// 2 – customer paid it means working with order, wrapping with order
+// 3 – tailor posted order
+// 4 -  received order
+// 5 – rejected order
