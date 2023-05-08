@@ -94,7 +94,8 @@ class _CustomOderStep2State extends State<CustomOderStep2> {
               children: <Widget>[
                 InteractiveViewer(
                   child: Image.asset(
-                    "assets/Guide/women_guide.jpg",
+                    data['category']=="women"?
+                    "assets/Guide/women_guide.jpg":data['category']=="kids"?"assets/Guide/kids_guide.jpg":"assets/Guide/men_guide.jpg",
                     width: scrnwidth,
                     // width: 70,
                   ),
